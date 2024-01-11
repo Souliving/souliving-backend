@@ -14,14 +14,14 @@ import souliving.backend.service.fake.FakeHomeTypeService
 class HomeTypeController(private val homeTypeService: FakeHomeTypeService) {
 
     @GetMapping("/")
-    private fun getAllHomeTypes(): Flow<HomeType> =
+    fun getAllHomeTypes(): Flow<HomeType> =
         homeTypeService.getAllHomeTypes()?.let {
             logResponse("Find All home types")
             return@let it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home types")
 
     @GetMapping("/getHomeTypeById/{id}")
-    private suspend fun getHomeTypeById(@PathVariable id: Long): HomeType =
+    suspend fun getHomeTypeById(@PathVariable id: Long): HomeType =
         homeTypeService.getHomeTypeById(id)?.let {
             logResponse("Find home type by id: $id")
             return@let it

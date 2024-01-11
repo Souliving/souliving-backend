@@ -15,7 +15,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
 
 
     @GetMapping("/")
-    private fun getAllHomeOwners(): Flow<HomeOwner> =
+    fun getAllHomeOwners(): Flow<HomeOwner> =
         homeOwnerService.getAllHomeOwners()?.let {
             logResponse("Find All home owners")
             return@let it
@@ -23,7 +23,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
 
 
     @GetMapping("/getHomeOwnerById/{id}")
-    private suspend fun getHomeOwnerById(@PathVariable id: Long): HomeOwner =
+    suspend fun getHomeOwnerById(@PathVariable id: Long): HomeOwner =
         homeOwnerService.getHomeOwnerById(id)?.let {
             logResponse("Find home owner by id: $id")
             return@let it
@@ -33,7 +33,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
 
 
     @GetMapping("/getHomeOwnersByHomeTypeId/{id}")
-    private suspend fun getHomeOwnersByHomeTypeId(@PathVariable id: Long): Flow<HomeOwner> =
+    suspend fun getHomeOwnersByHomeTypeId(@PathVariable id: Long): Flow<HomeOwner> =
         homeOwnerService.getHomeOwnersByHomeId(id)?.let {
             logResponse("Find home owners by home type id: $id")
             return@let it

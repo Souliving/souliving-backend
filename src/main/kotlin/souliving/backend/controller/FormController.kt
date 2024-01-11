@@ -14,7 +14,7 @@ import souliving.backend.service.fake.FakeFormService
 class FormController(private var formService: FakeFormService) {
 
     @GetMapping("/")
-    private fun getAllForms(): Flow<Form> =
+    fun getAllForms(): Flow<Form> =
         formService.getAllForms()?.let {
             logResponse("Get all forms")
             return@let it
@@ -23,7 +23,7 @@ class FormController(private var formService: FakeFormService) {
         )
 
     @GetMapping("/getFormByUserId/{userId}")
-    private suspend fun getFormByUserId(@PathVariable userId: Long): Form =
+    suspend fun getFormByUserId(@PathVariable userId: Long): Form =
         formService.getFormByUserId(userId)?.let {
             logResponse("Get form by User id : $userId")
             return@let it
@@ -32,7 +32,7 @@ class FormController(private var formService: FakeFormService) {
         )
 
     @GetMapping("/getFormByShortFormId/{shortFormId}")
-    private suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): Form =
+    suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): Form =
         formService.getFormByShortFormId(shortFormId)?.let {
             logResponse("Get form by Short Form Id : $shortFormId")
             return@let it

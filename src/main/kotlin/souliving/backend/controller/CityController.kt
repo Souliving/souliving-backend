@@ -14,13 +14,13 @@ import souliving.backend.service.fake.FakeCityService
 class CityController(private var cityService: FakeCityService) {
 
     @GetMapping("/")
-    private fun getAllCities(): Flow<City> =
+    fun getAllCities(): Flow<City> =
         cityService.getCities().also {
             logResponse("Find All cities")
         }
 
     @GetMapping("/{id}")
-    private suspend fun getCityById(@PathVariable id: Long): City =
+    suspend fun getCityById(@PathVariable id: Long): City =
         cityService.getCitiesById(id)?.let {
             logResponse("Found city with id: $id")
             return@let it

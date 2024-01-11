@@ -13,7 +13,7 @@ import souliving.backend.service.fake.FakePropertiesService
 class PropertiesController(private var propertiesService: FakePropertiesService) {
 
     @GetMapping("/getPropertiesById/{id}")
-    private suspend fun getPropertiesById(@PathVariable id: Long): Properties =
+    suspend fun getPropertiesById(@PathVariable id: Long): Properties =
         propertiesService.getPropertiesById(id)?.let {
             logResponse("Find properties by id: $id")
             return@let it
@@ -22,7 +22,7 @@ class PropertiesController(private var propertiesService: FakePropertiesService)
         )
 
     @PostMapping("/createProperties")
-    private suspend fun createProperties(@RequestBody properties: Properties) {
+    suspend fun createProperties(@RequestBody properties: Properties) {
         propertiesService.createProperties(properties)?.let {
             logResponse("Create properties")
         } ?: throw ResponseStatusException(
