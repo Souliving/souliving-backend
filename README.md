@@ -17,5 +17,5 @@ docker run -dit --memory="512m" --memory-swap="512m" -p 8080:8080 souliving-back
 
 docker run -dit --memory="512m" --memory-swap="512m" -p 8080:8080 georgedorohov/souliving-backend
 
-
+docker logs -f $container-id
 
