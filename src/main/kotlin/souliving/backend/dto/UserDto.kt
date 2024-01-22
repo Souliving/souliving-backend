@@ -1,12 +1,9 @@
-package souliving.backend.model
+package souliving.backend.dto
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import souliving.backend.model.UserRole
 import java.time.LocalDateTime
 
-@Table("users")
-data class User(
-    @Id
+data class UserDto(
     var id: Long? = null,
     val email: String,
     val password: String,
@@ -16,9 +13,3 @@ data class User(
     val createDate: LocalDateTime,
     val modifyDate: LocalDateTime
 )
-
-enum class UserRole {
-    USER, ADMIN
-}
-
-

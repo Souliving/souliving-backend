@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.map
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.UserDto
 import souliving.backend.logger.logResponse
-import souliving.backend.model.User
-import souliving.backend.response.UserResponse
+import souliving.backend.mapper.toDto
 import souliving.backend.service.UserService
 
 @RestController
@@ -15,10 +15,10 @@ import souliving.backend.service.UserService
 @RequestMapping("/api/v1/users")
 class UserController(private var userService: UserService) {
     @GetMapping("/name/{name}")
-    suspend fun getUserByName(@PathVariable name: String): UserResponse? =
+    suspend fun getUserByName(@PathVariable name: String): UserDto? =
         userService.findUserByName(name)?.let {
-            logResponse("get user by name", it.toResponse().toString())
-            it.toResponse()
+            logResponse("get user by name", it.toDto().toString())
+            it.toDto()
         }
             ?: throw ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -26,16 +26,16 @@ class UserController(private var userService: UserService) {
             )
 
     @GetMapping("/")
-    fun getAllUsers(): Flow<UserResponse?> =
+    fun getAllUsers(): Flow<UserDto?> =
         userService.findAll().map {
-            it.toResponse()
+            it.toDto()
         }.also { logResponse("Find all users") }
 
     @GetMapping("/{id}")
-    suspend fun getUserById(@PathVariable id: Long): UserResponse? =
+    suspend fun getUserById(@PathVariable id: Long): UserDto? =
         userService.findById(id)?.let {
-            logResponse("get user by id", it.toResponse().toString())
-            it.toResponse()
+            logResponse("get user by id", it.toDto().toString())
+            it.toDto()
         }
             ?: throw ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -43,10 +43,4 @@ class UserController(private var userService: UserService) {
             )
 }
 
-fun User.toResponse(): UserResponse =
-    UserResponse(
-        id = this.id!!,
-        email = this.email,
-        name = this.name,
-        surname = this.surname,
-    )
+
