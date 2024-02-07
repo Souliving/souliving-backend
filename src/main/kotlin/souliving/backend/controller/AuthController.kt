@@ -1,10 +1,7 @@
 package souliving.backend.controller
 
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import souliving.backend.dto.AuthUserDetails
 import souliving.backend.dto.CreateUserDto
 import souliving.backend.jwt.JwtTokenDetails
@@ -12,6 +9,7 @@ import souliving.backend.service.SecurityService
 import souliving.backend.service.UserService
 
 @RequestMapping("api/v1/auth")
+@CrossOrigin
 @RestController
 class AuthController(val userService: UserService, val securityService: SecurityService) {
 
