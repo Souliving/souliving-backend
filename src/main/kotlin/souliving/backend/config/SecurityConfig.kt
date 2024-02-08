@@ -10,6 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.reactive.CorsConfigurationSource
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
+import org.springframework.web.reactive.config.WebFluxConfigurer
 import reactor.core.publisher.Mono
 import souliving.backend.jwt.JwtAuthenticationManager
 import souliving.backend.jwt.JwtTokenAuthenticationConverter
@@ -17,7 +21,7 @@ import souliving.backend.model.UserRole
 import java.security.SecureRandom
 
 @Configuration
-class SecurityConfig {
+class SecurityConfig : WebFluxConfigurer {
 
     val whiteList =
         arrayOf("api/v1/auth/register", "api/v1/auth/registerAdmin", "api/v1/auth/login", "/api/v1/cities/**")
@@ -28,6 +32,9 @@ class SecurityConfig {
         jwtAuthFilter: AuthenticationWebFilter
     ): SecurityWebFilterChain {
         return http
+            .cors {
+                it.configurationSource(addCors())
+            }
             .csrf { it.disable() }
             .authorizeExchange {
                 it.pathMatchers(HttpMethod.POST, *whiteList).permitAll()
@@ -44,6 +51,17 @@ class SecurityConfig {
             }
             .addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .build()
+    }
+
+    @Bean
+    fun addCors(): CorsConfigurationSource? {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowedOrigins = listOf("*")
+        config.allowedMethods = listOf("*")
+        config.allowedHeaders = listOf("*")
+        source.registerCorsConfiguration("/**", config)
+        return source
     }
 
     @Bean
