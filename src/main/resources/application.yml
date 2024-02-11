@@ -1,5 +1,13 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://193.149.190.120:5432/test
+    url: r2dbc:postgresql://193.149.190.120:5432/security
     username: postgres
     password: 402012Ehodas
+
+jwt:
+  secret: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW1vLXNlY3VyaXR5IiwiaWF0IjoxNzA1OTQxOTk0LCJleHAiOjE3MDU5NDM1OTR9.y4NXkiSAcSULeaZgRTdlHEY9qyfUWPasPbjtHW6YXnY
+  issuer: demo-security
+  expirationTime: 30m
+
+server:
+  port: 9090
