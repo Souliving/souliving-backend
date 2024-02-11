@@ -30,6 +30,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
+    implementation("org.springdoc:springdoc-openapi-starter-common:2.3.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.security:spring-security-config")
 

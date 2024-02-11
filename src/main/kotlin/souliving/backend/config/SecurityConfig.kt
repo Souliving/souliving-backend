@@ -24,7 +24,7 @@ import java.security.SecureRandom
 class SecurityConfig : WebFluxConfigurer {
 
     val whiteList =
-        arrayOf("/api/v1/**")
+        arrayOf("/api/v1/**", "/**")
 
     @Bean
     fun springSecurityFilterChain(
