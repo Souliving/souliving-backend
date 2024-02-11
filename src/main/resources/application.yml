@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://193.149.190.120:5432/security
+    url: r2dbc:postgresql://193.149.190.120:5432/coliver
     username: postgres
     password: 402012Ehodas
 
@@ -10,4 +10,4 @@ jwt:
   expirationTime: 30m
 
 server:
-  port: 9090
+  port: 8080

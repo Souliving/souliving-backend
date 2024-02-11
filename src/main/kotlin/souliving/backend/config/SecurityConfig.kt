@@ -24,7 +24,7 @@ import java.security.SecureRandom
 class SecurityConfig : WebFluxConfigurer {
 
     val whiteList =
-        arrayOf("api/v1/auth/register", "api/v1/auth/registerAdmin", "api/v1/auth/login", "/api/v1/cities/**")
+        arrayOf("/api/v1/**")
 
     @Bean
     fun springSecurityFilterChain(
@@ -37,7 +37,8 @@ class SecurityConfig : WebFluxConfigurer {
             }
             .csrf { it.disable() }
             .authorizeExchange {
-                it.pathMatchers(HttpMethod.POST, *whiteList).permitAll()
+                it.pathMatchers(HttpMethod.GET, *whiteList).permitAll()
+                    .pathMatchers(HttpMethod.POST, *whiteList).permitAll()
                     .pathMatchers("api/v1/users/**").hasAuthority(UserRole.ADMIN.toString())
                     .anyExchange().authenticated()
             }
