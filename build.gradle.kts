@@ -9,9 +9,9 @@ plugins {
     kotlin("plugin.spring") version "1.9.20"
 }
 
-group = "souliving-security"
+group = "souliving-backend"
 version = "0.0.1-SNAPSHOT"
-archivesName = "souliving-security"
+archivesName = "souliving-backend"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
