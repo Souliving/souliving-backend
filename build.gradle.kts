@@ -7,6 +7,11 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.20"
     kotlin("plugin.spring") version "1.9.20"
+    kotlin("plugin.noarg") version "1.9.22"
+}
+
+noArg {
+    annotation("souliving.backend.model.NoArg")
 }
 
 group = "souliving-backend"
@@ -29,6 +34,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
 
     implementation("org.springdoc:springdoc-openapi-starter-common:2.3.0")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
