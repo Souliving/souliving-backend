@@ -1,4 +1,4 @@
-package souliving.backend.service
+package souliving.backend.utils
 
 import java.io.ByteArrayOutputStream
 import java.io.IOException

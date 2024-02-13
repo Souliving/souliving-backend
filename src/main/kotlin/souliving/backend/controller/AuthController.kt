@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import souliving.backend.dto.AuthUserDetails
 import souliving.backend.dto.CreateUserDto
 import souliving.backend.jwt.JwtTokenDetails
+import souliving.backend.logger.logResponse
 import souliving.backend.service.SecurityService
 import souliving.backend.service.UserService
 
@@ -16,15 +17,18 @@ class AuthController(val userService: UserService, val securityService: Security
     @PostMapping("register")
     suspend fun register(@RequestBody createUserDto: CreateUserDto) {
         userService.createUser(createUserDto)
+        logResponse("Create user: $createUserDto")
     }
 
     @PostMapping("registerAdmin")
     suspend fun registerAdmin(@RequestBody createUserDto: CreateUserDto) {
         userService.createUserAdmin(createUserDto)
+        logResponse("Create admin: $createUserDto")
     }
 
     @PostMapping("login")
     suspend fun authenticate(@RequestBody authUserDetails: AuthUserDetails): JwtTokenDetails {
+        logResponse("Login with email: ${authUserDetails.email} and password: ${authUserDetails.password}")
         return securityService.authenticate(authUserDetails.email, authUserDetails.password)
     }
 }
