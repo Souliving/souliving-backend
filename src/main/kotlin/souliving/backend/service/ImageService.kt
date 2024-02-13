@@ -9,6 +9,7 @@ import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import souliving.backend.model.image.Image
 import souliving.backend.repository.ImageRepository
+import souliving.backend.utils.ImageUtils
 import java.io.IOException
 import java.util.*
 import java.util.zip.DataFormatException
@@ -22,8 +23,8 @@ class ImageService(
     @Throws(IOException::class)
     suspend fun uploadImage(imageFile: FilePart): String {
         val imageToSave = Image(
-            2, imageFile.filename(), imageFile.headers().contentType!!.type,
-            ImageUtils.compressImage(
+            name = imageFile.filename(), type = imageFile.headers().contentType!!.type,
+            container = ImageUtils.compressImage(
                 withContext(Dispatchers.IO) {
                     DataBufferUtils.join(imageFile.content())
                         .map { dataBuffer -> dataBuffer.toByteBuffer().array() }.block()
