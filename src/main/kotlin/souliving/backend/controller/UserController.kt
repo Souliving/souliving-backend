@@ -3,8 +3,10 @@ package souliving.backend.controller
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.FillUserDto
 import souliving.backend.dto.UserDto
 import souliving.backend.logger.logResponse
 import souliving.backend.mapper.toDto
@@ -41,6 +43,18 @@ class UserController(private var userService: UserService) {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "User with this $id name doesn't exist"
             )
+
+    @PostMapping("/fillUser/{id}")
+    suspend fun fillUserById(@PathVariable id: Long, @RequestBody userDto: FillUserDto): ResponseEntity<*> {
+        val res = userService.fillUserById(id, userDto)
+        if (!res) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Problem with filling"
+            )
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Successful fill user with id: $id")
+    }
 }
 
 

@@ -11,7 +11,7 @@ data class User(
     val email: String,
     val password: String,
     val role: UserRole,
-    val name: String,
+    val name: String? = null,
     val enabled: Boolean,
     val createDate: LocalDateTime,
     val modifyDate: LocalDateTime

@@ -14,11 +14,13 @@ class JwtTokenGenerator(val jwtProperties: JwtProperties) {
         val issueDate = Date()
         val expirationDate = Date(issueDate.time + jwtProperties.expirationTime.toMillis())
         val claims = mapOf("email" to user.email, "role" to user.role)
-        return generateToken(user.id!!, issueDate, expirationDate, claims)
+        return generateToken(user.id!!, user.email, user.name, issueDate, expirationDate, claims)
     }
 
     private suspend fun generateToken(
         userId: Long,
+        email: String,
+        name: String,
         issueDate: Date,
         expirationDate: Date,
         claims: Map<String, Any>
@@ -31,6 +33,6 @@ class JwtTokenGenerator(val jwtProperties: JwtProperties) {
             .setExpiration(expirationDate)
             .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(jwtProperties.secret.toByteArray()))
             .compact()
-        return JwtTokenDetails(userId, token, issueDate, expirationDate);
+        return JwtTokenDetails(userId, email, name, token, issueDate, expirationDate);
     }
 }

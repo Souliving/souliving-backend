@@ -19,3 +19,7 @@ fun logResponse(
 fun logResponse(req: String) {
     log.info("Request $req")
 }
+
+fun logError(req: String) {
+    log.error(req)
+}

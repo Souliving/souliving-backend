@@ -1,6 +1,7 @@
 package souliving.backend.mapper
 
 import souliving.backend.dto.CreateUserDto
+import souliving.backend.dto.FillUserDto
 import souliving.backend.dto.UserDto
 import souliving.backend.model.User
 import souliving.backend.model.UserRole
@@ -12,7 +13,7 @@ fun User.toDto(): UserDto {
         email = this.email,
         password = this.password,
         role = this.role,
-        name = this.name,
+        name = this.name.toString(),
         enabled = this.enabled,
         createDate = this.createDate,
         modifyDate = this.modifyDate
@@ -25,7 +26,7 @@ fun CreateUserDto.toEntityUser(): User {
         email = this.email,
         password = this.password,
         role = UserRole.USER,
-        name = this.name,
+        name = "",
         enabled = true,
         createDate = createDate,
         modifyDate = createDate
@@ -38,9 +39,23 @@ fun CreateUserDto.toEntityAdmin(): User {
         email = this.email,
         password = this.password,
         role = UserRole.ADMIN,
-        name = this.name,
+        name = "",
         enabled = true,
         createDate = createDate,
         modifyDate = createDate
+    )
+}
+
+fun FillUserDto.toUser(user: User): User {
+    val modifyDate = LocalDateTime.now()
+    return User(
+        id = user.id,
+        email = user.email,
+        password = user.password,
+        role = user.role,
+        name = this.name,
+        enabled = user.enabled,
+        createDate = user.createDate,
+        modifyDate = modifyDate
     )
 }
