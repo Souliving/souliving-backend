@@ -50,7 +50,7 @@ class UserController(private var userService: UserService) {
         if (!res) {
             throw ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Problem with filling"
+                "Problem with user filling"
             )
         }
         return ResponseEntity.status(HttpStatus.OK).body("Successful fill user with id: $id")
