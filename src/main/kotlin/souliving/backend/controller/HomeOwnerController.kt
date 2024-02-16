@@ -18,7 +18,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
     fun getAllHomeOwners(): Flow<HomeOwner> =
         homeOwnerService.getAllHomeOwners()?.let {
             logResponse("Find All home owners")
-            return@let it
+            it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home owners")
 
 
@@ -26,7 +26,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
     suspend fun getHomeOwnerById(@PathVariable id: Long): HomeOwner =
         homeOwnerService.getHomeOwnerById(id)?.let {
             logResponse("Find home owner by id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home owner by id: $id"
         )
@@ -36,7 +36,7 @@ class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
     suspend fun getHomeOwnersByHomeTypeId(@PathVariable id: Long): Flow<HomeOwner> =
         homeOwnerService.getHomeOwnersByHomeId(id)?.let {
             logResponse("Find home owners by home type id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home owner by home type  id: $id"
         )

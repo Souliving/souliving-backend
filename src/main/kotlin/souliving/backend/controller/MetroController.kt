@@ -26,13 +26,13 @@ class MetroController(private val metroService: FakeMetroService) {
                 throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't metro by id: $cityId")
             }
             logResponse("Get metro by cityId: $cityId")
-            return@let it
+            it
         }
 
     @GetMapping("/getMetroByName/{name}")
     suspend fun getMetroByName(@PathVariable name: String): Metro =
         metroService.getMetroByName(name)?.let {
             logResponse("Get metro by name: $name")
-            return@let it
+            it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't metro by name: $name")
 }

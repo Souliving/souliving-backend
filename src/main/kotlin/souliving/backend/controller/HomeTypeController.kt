@@ -17,14 +17,14 @@ class HomeTypeController(private val homeTypeService: FakeHomeTypeService) {
     fun getAllHomeTypes(): Flow<HomeType> =
         homeTypeService.getAllHomeTypes()?.let {
             logResponse("Find All home types")
-            return@let it
+            it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home types")
 
     @GetMapping("/getHomeTypeById/{id}")
     suspend fun getHomeTypeById(@PathVariable id: Long): HomeType =
         homeTypeService.getHomeTypeById(id)?.let {
             logResponse("Find home type by id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home type by id: $id"
         )

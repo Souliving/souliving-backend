@@ -16,7 +16,7 @@ class PropertiesController(private var propertiesService: FakePropertiesService)
     suspend fun getPropertiesById(@PathVariable id: Long): Properties =
         propertiesService.getPropertiesById(id)?.let {
             logResponse("Find properties by id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find properties by id: $id"
         )

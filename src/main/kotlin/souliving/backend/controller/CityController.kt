@@ -23,7 +23,7 @@ class CityController(private var cityService: FakeCityService) {
     suspend fun getCityById(@PathVariable id: Long): City =
         cityService.getCitiesById(id)?.let {
             logResponse("Found city with id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "City with id $id not found")
 
 }

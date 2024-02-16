@@ -22,6 +22,6 @@ class DistrictController(private var districtService: FakeDistrictService) {
     suspend fun getAllDistrictByCityId(@PathVariable id: Long): Flow<District> =
         districtService.getAllDistrictByCityId(id)?.let {
             logResponse("Found district with id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "City with id $id")
 }

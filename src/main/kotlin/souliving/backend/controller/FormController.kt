@@ -17,7 +17,7 @@ class FormController(private var formService: FakeFormService) {
     fun getAllForms(): Flow<Form> =
         formService.getAllForms()?.let {
             logResponse("Get all forms")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find forms"
         )
@@ -26,7 +26,7 @@ class FormController(private var formService: FakeFormService) {
     suspend fun getFormByUserId(@PathVariable userId: Long): Form =
         formService.getFormByUserId(userId)?.let {
             logResponse("Get form by User id : $userId")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by user id: $userId"
         )
@@ -35,7 +35,7 @@ class FormController(private var formService: FakeFormService) {
     suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): Form =
         formService.getFormByShortFormId(shortFormId)?.let {
             logResponse("Get form by Short Form Id : $shortFormId")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by Short Form Id: $shortFormId"
         )

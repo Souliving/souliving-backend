@@ -17,7 +17,7 @@ class ShortFormController(private var shortFormService: FakeShortFormService) {
     fun getAllShortForms(): Flow<ShortForm> =
         shortFormService.getAllShortForm()?.let {
             logResponse("Get all Short Forms")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Didn't find short forms"
@@ -27,7 +27,7 @@ class ShortFormController(private var shortFormService: FakeShortFormService) {
     suspend fun getShortFormByFormId(@PathVariable id: Long): ShortForm? =
         shortFormService.getShortFormByFormId(id)?.let {
             logResponse("Get Short Form by Form id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Didn't find short form by form id: $id"
@@ -37,7 +37,7 @@ class ShortFormController(private var shortFormService: FakeShortFormService) {
     suspend fun getShortFormByUserId(@PathVariable id: Long): ShortForm? =
         shortFormService.getShortFormByUserId(id)?.let {
             logResponse("Get Short Form by User id: $id")
-            return@let it
+            it
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Didn't find short form by User id: $id"
