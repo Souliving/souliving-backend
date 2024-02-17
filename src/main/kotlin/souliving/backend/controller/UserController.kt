@@ -46,7 +46,10 @@ class UserController(private var userService: UserService) {
 
     @PostMapping("/fillUser/{id}")
     suspend fun fillUserById(@PathVariable id: Long, @RequestBody userDto: FillUserDto): ResponseEntity<*> {
-        val res = userService.fillUserById(id, userDto)
+        val res = userService.fillUserById(id, userDto).let {
+            logResponse("Fill User by id: $id")
+            it
+        }
         if (!res) {
             throw ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
