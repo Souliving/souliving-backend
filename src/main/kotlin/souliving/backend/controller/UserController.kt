@@ -19,7 +19,7 @@ class UserController(private var userService: UserService) {
     @GetMapping("/name/{name}")
     suspend fun getUserByName(@PathVariable name: String): UserDto? =
         userService.findUserByName(name)?.let {
-            logResponse("get user by name", it.toDto().toString())
+            logResponse("Get user by name", it.toDto().toString())
             it.toDto()
         }
             ?: throw ResponseStatusException(
