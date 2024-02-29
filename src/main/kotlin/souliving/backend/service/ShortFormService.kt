@@ -1,14 +1,14 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.flow.Flow
-import souliving.backend.model.form.ShortForm
+import souliving.backend.dto.ShortFormDto
 
 interface ShortFormService {
 
-    fun getAllShortForm(): Flow<ShortForm>?
+    fun getAllShortForm(): Flow<ShortFormDto>?
 
-    suspend fun getShortFormByFormId(id: Long): ShortForm?
+    suspend fun getShortFormByFormId(id: Long): ShortFormDto?
 
-    suspend fun getShortFormByUserId(id: Long?): ShortForm?
+    suspend fun getShortFormByUserId(id: Long?): ShortFormDto?
 
 }

@@ -9,4 +9,6 @@ interface MetroService {
     suspend fun getAllMetroByCityId(cityId: Long): Flow<Metro>?
 
     suspend fun getMetroByName(name: String): Metro?
+
+    suspend fun getMetroById(id: Long?): Metro?
 }

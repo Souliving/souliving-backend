@@ -7,4 +7,6 @@ interface DistrictService {
     fun getDistricts(): Flow<District>
 
     suspend fun getAllDistrictByCityId(cityId: Long): Flow<District>?
+
+    suspend fun getDistrictById(id: Long): District?
 }

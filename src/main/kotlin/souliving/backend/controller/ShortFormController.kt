@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.ShortFormDto
 import souliving.backend.logger.logResponse
-import souliving.backend.model.form.ShortForm
 import souliving.backend.service.fake.FakeShortFormService
 
 @RestController
@@ -14,17 +14,14 @@ import souliving.backend.service.fake.FakeShortFormService
 class ShortFormController(private var shortFormService: FakeShortFormService) {
 
     @GetMapping("/")
-    fun getAllShortForms(): Flow<ShortForm> =
-        shortFormService.getAllShortForm()?.let {
+    fun getAllShortForms(): Flow<ShortFormDto> =
+        shortFormService.getAllShortForm().let {
             logResponse("Get all Short Forms")
             it
-        } ?: throw ResponseStatusException(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "Didn't find short forms"
-        )
+        }
 
     @GetMapping("/getShortFormByFormId/{id}")
-    suspend fun getShortFormByFormId(@PathVariable id: Long): ShortForm? =
+    suspend fun getShortFormByFormId(@PathVariable id: Long): ShortFormDto? =
         shortFormService.getShortFormByFormId(id)?.let {
             logResponse("Get Short Form by Form id: $id")
             it
@@ -34,7 +31,7 @@ class ShortFormController(private var shortFormService: FakeShortFormService) {
         )
 
     @GetMapping("/getShortFormByUserId/{id}")
-    suspend fun getShortFormByUserId(@PathVariable id: Long): ShortForm? =
+    suspend fun getShortFormByUserId(@PathVariable id: Long): ShortFormDto? =
         shortFormService.getShortFormByUserId(id)?.let {
             logResponse("Get Short Form by User id: $id")
             it

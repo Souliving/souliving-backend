@@ -1,14 +1,14 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.flow.Flow
-import souliving.backend.model.form.Form
+import souliving.backend.dto.FormDto
 
 interface FormService {
 
-    fun getAllForms(): Flow<Form>?
+    fun getAllForms(): Flow<FormDto>
 
-    suspend fun getFormByUserId(id: Long): Form?
+    suspend fun getFormByUserId(id: Long): FormDto?
 
-    suspend fun getFormByShortFormId(id: Long): Form?
+    suspend fun getFormByShortFormId(id: Long): FormDto?
 
 }

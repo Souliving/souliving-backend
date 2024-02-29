@@ -26,4 +26,7 @@ class FakeMetroService : MetroService {
 
     override suspend fun getMetroByName(name: String): Metro? =
         metro.filter { it.name == name }.firstOrNull()
+
+    override suspend fun getMetroById(id: Long?): Metro? =
+        metro.filter { it.id == id }.firstOrNull()
 }

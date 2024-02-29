@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.FormDto
 import souliving.backend.logger.logResponse
-import souliving.backend.model.form.Form
 import souliving.backend.service.fake.FakeFormService
 
 @RestController
@@ -14,16 +14,14 @@ import souliving.backend.service.fake.FakeFormService
 class FormController(private var formService: FakeFormService) {
 
     @GetMapping("/")
-    fun getAllForms(): Flow<Form> =
-        formService.getAllForms()?.let {
+    fun getAllForms(): Flow<FormDto> =
+        formService.getAllForms().let {
             logResponse("Get all forms")
             it
-        } ?: throw ResponseStatusException(
-            HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find forms"
-        )
+        }
 
     @GetMapping("/getFormByUserId/{userId}")
-    suspend fun getFormByUserId(@PathVariable userId: Long): Form =
+    suspend fun getFormByUserId(@PathVariable userId: Long): FormDto =
         formService.getFormByUserId(userId)?.let {
             logResponse("Get form by User id : $userId")
             it
@@ -32,7 +30,7 @@ class FormController(private var formService: FakeFormService) {
         )
 
     @GetMapping("/getFormByShortFormId/{shortFormId}")
-    suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): Form =
+    suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): FormDto =
         formService.getFormByShortFormId(shortFormId)?.let {
             logResponse("Get form by Short Form Id : $shortFormId")
             it
