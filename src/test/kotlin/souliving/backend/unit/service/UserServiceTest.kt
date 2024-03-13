@@ -4,13 +4,12 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import org.mockito.BDDMockito.given
-import org.mockito.Mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.crypto.password.PasswordEncoder
-import souliving.backend.dto.CreateUserDto
 import souliving.backend.mapper.toDto
+import souliving.backend.model.Gender
 import souliving.backend.model.User
 import souliving.backend.model.UserRole
 import souliving.backend.repository.UserRepository
@@ -34,7 +33,7 @@ class UserServiceTest(
         val expectedUser = User(
             userId, "",
             "", UserRole.USER,
-            "", true,
+            "", Gender.FEMALE, true,
             LocalDateTime.now(), LocalDateTime.now()
         )
 
@@ -50,7 +49,7 @@ class UserServiceTest(
         val expectedUser = User(
             0, email,
             "", UserRole.USER,
-            "", true,
+            "", Gender.FEMALE, true,
             LocalDateTime.now(), LocalDateTime.now()
         )
 
@@ -58,7 +57,7 @@ class UserServiceTest(
 
         val result = userService.findByEmail(email)
 
-        result shouldBe  expectedUser.toDto()
+        result shouldBe expectedUser.toDto()
     }
 
     /*should("Create user should return id of new user and make new user") {
@@ -76,13 +75,13 @@ class UserServiceTest(
         result shouldBe expectedUser.id
     }*/
 
-   /* should("Fill user by id should return and save fill user") {
-        val expectedUser = User(
-            0, "email",
-            "pass", UserRole.USER,
-            "", true,
-            LocalDateTime.now(), LocalDateTime.now()
-        )
-    }*/
+    /* should("Fill user by id should return and save fill user") {
+         val expectedUser = User(
+             0, "email",
+             "pass", UserRole.USER,
+             "", true,
+             LocalDateTime.now(), LocalDateTime.now()
+         )
+     }*/
 
 })
