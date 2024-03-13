@@ -3,6 +3,7 @@ package souliving.backend.service
 import kotlinx.coroutines.flow.Flow
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import souliving.backend.dto.CreateAdminDto
 import souliving.backend.dto.CreateUserDto
 import souliving.backend.dto.FillUserDto
 import souliving.backend.dto.UserDto
@@ -32,8 +33,8 @@ class UserService(
         return userEntity.id!!
     }
 
-    suspend fun createUserAdmin(createUserDto: CreateUserDto): Long {
-        val adminEntity = createUserDto.apply { password = passwordEncoder.encode(password) }.toEntityAdmin()
+    suspend fun createUserAdmin(createAdminDto: CreateAdminDto): Long {
+        val adminEntity = createAdminDto.apply { password = passwordEncoder.encode(password) }.toEntityAdmin()
         userRepository.save(adminEntity)
         return adminEntity.id!!
     }

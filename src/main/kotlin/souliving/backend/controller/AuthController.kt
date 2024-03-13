@@ -7,10 +7,7 @@ import kotlinx.coroutines.withContext
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import souliving.backend.dto.AuthUserDetails
-import souliving.backend.dto.CreateUserDto
-import souliving.backend.dto.IdDto
-import souliving.backend.dto.LoginAnswerDto
+import souliving.backend.dto.*
 import souliving.backend.logger.logResponse
 import souliving.backend.mapper.toLoginAnswerDto
 import souliving.backend.service.SecurityService
@@ -29,9 +26,9 @@ class AuthController(val userService: UserService, val securityService: Security
     }
 
     @PostMapping("registerAdmin")
-    suspend fun registerAdmin(@RequestBody createUserDto: CreateUserDto): ResponseEntity<*> {
-        logResponse("Create admin: $createUserDto")
-        val id = userService.createUserAdmin(createUserDto)
+    suspend fun registerAdmin(@RequestBody createAdminDto: CreateAdminDto): ResponseEntity<*> {
+        logResponse("Create admin: $createAdminDto")
+        val id = userService.createUserAdmin(createAdminDto)
         return ResponseEntity.status(HttpStatus.OK).body(IdDto(id))
     }
 

@@ -9,6 +9,7 @@ data class UserDto(
     val password: String,
     val role: UserRole,
     val name: String,
+    val gender: String,
     val enabled: Boolean,
     val createDate: LocalDateTime,
     val modifyDate: LocalDateTime
