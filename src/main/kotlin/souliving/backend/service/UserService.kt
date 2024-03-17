@@ -27,10 +27,10 @@ class UserService(
 
     suspend fun findById(id: Long): User? = userRepository.findById(id)
 
-    suspend fun createUser(createUserDto: CreateUserDto): Long {
+    suspend fun createUser(createUserDto: CreateUserDto): Long? {
         val userEntity = createUserDto.apply { password = passwordEncoder.encode(password) }.toEntityUser()
         userRepository.save(userEntity)
-        return userEntity.id!!
+        return userEntity.id
     }
 
     suspend fun createUserAdmin(createAdminDto: CreateAdminDto): Long {
@@ -41,7 +41,7 @@ class UserService(
 
     suspend fun findByEmail(email: String): UserDto? =
         userRepository.findByEmail(email)?.toDto()
-            ?: throw UserNotFoundException("User for email $email doesn't exist")
+            ?: throw UserNotFoundException("User with email $email doesn't exist")
 
     suspend fun fillUserById(id: Long, fillUserDto: FillUserDto): Boolean {
         val user = userRepository.findById(id)?.let {

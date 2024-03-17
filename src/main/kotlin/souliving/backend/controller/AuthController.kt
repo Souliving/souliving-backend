@@ -20,9 +20,17 @@ class AuthController(val userService: UserService, val securityService: Security
 
     @PostMapping("register")
     suspend fun register(@RequestBody createUserDto: CreateUserDto): ResponseEntity<*> {
-        logResponse("Create user: $createUserDto")
+        val authUser = AuthUserDetails(createUserDto.email, createUserDto.password)
         val id = userService.createUser(createUserDto)
-        return ResponseEntity.status(HttpStatus.OK).body(IdDto(id))
+        logResponse("Create user: $createUserDto")
+        id?.let {
+            val answer = loginUser(authUser)
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                    answer
+                )
+        } ?: return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Problem with register user with email: ${createUserDto.email}")
     }
 
     @PostMapping("registerAdmin")
@@ -34,6 +42,10 @@ class AuthController(val userService: UserService, val securityService: Security
 
     @PostMapping("login")
     suspend fun authenticate(@RequestBody authUserDetails: AuthUserDetails): LoginAnswerDto {
+        return loginUser(authUserDetails)
+    }
+
+    private suspend fun loginUser(authUserDetails: AuthUserDetails): LoginAnswerDto {
         val jwt = withContext(Dispatchers.IO) {
             async {
                 securityService.authenticate(authUserDetails.email, authUserDetails.password)
@@ -42,7 +54,7 @@ class AuthController(val userService: UserService, val securityService: Security
 
         val jwtAnswer = jwt.await()
 
-        logResponse("Login with email: ${authUserDetails.email} and password: ${authUserDetails.password}")
+        logResponse("Login with email: ${authUserDetails.email}")
 
         return jwtAnswer.toLoginAnswerDto()
     }
