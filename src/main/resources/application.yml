@@ -14,6 +14,21 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: soulflatmate
+    password: ieaa nwew ytth apej
+    test-connection: true # проверка подключения при старте приложения
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+    sender: # отправитель письма (его почта и имя)
+      email: soulflatmate@gmail.com
+      text: no-reply
 
 jwt:
   secret: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW1vLXNlY3VyaXR5IiwiaWF0IjoxNzA1OTQxOTk0LCJleHAiOjE3MDU5NDM1OTR9.y4NXkiSAcSULeaZgRTdlHEY9qyfUWPasPbjtHW6YXnY
