@@ -33,7 +33,7 @@ class UserServiceTest(
         val expectedUser = User(
             userId, "",
             "", UserRole.USER,
-            "", Gender.FEMALE, true,
+            "", 0, Gender.FEMALE, true,
             LocalDateTime.now(), LocalDateTime.now()
         )
 
@@ -49,7 +49,7 @@ class UserServiceTest(
         val expectedUser = User(
             0, email,
             "", UserRole.USER,
-            "", Gender.FEMALE, true,
+            "", 0, Gender.FEMALE, true,
             LocalDateTime.now(), LocalDateTime.now()
         )
 
