@@ -8,14 +8,15 @@ import java.time.LocalDateTime
 
 data class ShortFormDto(
     var id: Long? = null,
-    var formId: Long? = null,
-    var userId: Long? = null,
-    var photoId: Long? = null,
-    var properties: Properties? = null,
+    var name: String,
+    val age: Int,
     var city: City? = null,
     var district: District? = null,
     var metro: Metro? = null,
-    var onlineDate: LocalDateTime,
     var budget: Long,
-    var dateMove: LocalDateTime
+    var description: String,
+    var dateMove: LocalDateTime,
+    var properties: Properties? = null,
+    var photoId: Long? = null,
+    var onlineDateTime: LocalDateTime,
 )

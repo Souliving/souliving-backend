@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.dto.FormDto
+import souliving.backend.dto.ShortFormDto
 import souliving.backend.logger.logResponse
 import souliving.backend.service.fake.FakeFormService
 
@@ -29,12 +30,10 @@ class FormController(private var formService: FakeFormService) {
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by user id: $userId"
         )
 
-    @GetMapping("/getFormByShortFormId/{shortFormId}")
-    suspend fun getFormByShortFormId(@PathVariable shortFormId: Long): FormDto =
-        formService.getFormByShortFormId(shortFormId)?.let {
-            logResponse("Get form by Short Form Id : $shortFormId")
+    @GetMapping("getShortForms")
+    suspend fun getShortForms(): Flow<ShortFormDto> =
+        formService.getShortForms().let {
+            logResponse("Get all short forms")
             it
-        } ?: throw ResponseStatusException(
-            HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by Short Form Id: $shortFormId"
-        )
+        }
 }

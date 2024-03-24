@@ -5,19 +5,46 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import org.springframework.stereotype.Repository
-import souliving.backend.model.form.Form
+import souliving.backend.model.Form
+import java.time.LocalDateTime
 
 @Repository
 class FakeFormRepository {
 
     var forms = flowOf(
         Form(
-            0, 0, 0, "Это я Жора",
-            0, listOf(0), 4.5, listOf("Хороший человек")
+            0,
+            1,
+            "Хочу крутую квартиру",
+            0,
+            listOf(0),
+            4.5,
+            listOf("Он крутой"),
+            1,
+            0,
+            0,
+            0,
+            0,
+            50000,
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ),
         Form(
-            1, 1, 1, "Это Маша",
-            1, listOf(1), 5.0, listOf("Прекрасный человек")
+            1,
+            2,
+            "Хочу новую квартиру",
+            1,
+            listOf(1),
+            5.0,
+            listOf("Онa крутая"),
+            2,
+            2,
+            1,
+            1,
+            1,
+            30000,
+            LocalDateTime.now(),
+            LocalDateTime.now()
         )
     )
 
@@ -28,6 +55,6 @@ class FakeFormRepository {
     suspend fun getFormByUserId(id: Long): Form? =
         forms.filter { it.userId == id }.firstOrNull()
 
-    suspend fun getFormByShortFormId(shortId: Long): Form? =
-        forms.filter { it.shortFormId == shortId }.firstOrNull()
+//    suspend fun getFormByShortFormId(shortId: Long): Form? =
+//        forms.filter { it.shortFormId == shortId }.firstOrNull()
 }

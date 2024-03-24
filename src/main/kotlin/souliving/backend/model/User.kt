@@ -12,6 +12,7 @@ data class User(
     val password: String,
     val role: UserRole,
     val name: String? = null,
+    val age: Int,
     val gender: Gender? = null,
     val enabled: Boolean,
     val createDate: LocalDateTime,

@@ -2,6 +2,7 @@ package souliving.backend.service
 
 import kotlinx.coroutines.flow.Flow
 import souliving.backend.dto.FormDto
+import souliving.backend.dto.ShortFormDto
 
 interface FormService {
 
@@ -9,6 +10,5 @@ interface FormService {
 
     suspend fun getFormByUserId(id: Long): FormDto?
 
-    suspend fun getFormByShortFormId(id: Long): FormDto?
-
+    suspend fun getShortForms(): Flow<ShortFormDto>
 }
