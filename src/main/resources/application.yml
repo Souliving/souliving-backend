@@ -19,7 +19,7 @@ spring:
     port: 465
     username: soulflatmate
     password: ieaa nwew ytth apej
-    test-connection: true # проверка подключения при старте приложения
+    test-connection: false # проверка подключения при старте приложения
     properties:
       mail:
         smtp:
