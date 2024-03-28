@@ -11,11 +11,19 @@ class FakePropertiesService : PropertiesService {
     private var properties = flowOf(
         Properties(
             0,
-            0,
-            0,
-            0,
-            0,
-            0
+            smoking = false,
+            alcohol = false,
+            petFriendly = true,
+            isClean = true,
+            homeOwnerId = 0
+        ),
+        Properties(
+            1,
+            smoking = true,
+            alcohol = true,
+            petFriendly = false,
+            isClean = false,
+            homeOwnerId = 1
         )
     )
 

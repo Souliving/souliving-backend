@@ -38,7 +38,7 @@ class FakeFormRepository {
             5.0,
             listOf("Онa крутая"),
             2,
-            2,
+            1,
             1,
             1,
             1,
