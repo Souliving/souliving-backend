@@ -43,7 +43,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.security:spring-security-config")
 
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.simplejavamail:simple-java-mail:8.8.0")
+    implementation("org.simplejavamail:spring-module:8.8.0")
 
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
