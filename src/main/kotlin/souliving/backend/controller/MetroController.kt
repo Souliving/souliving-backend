@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.model.locations.Metro
-import souliving.backend.service.fake.FakeMetroService
+import souliving.backend.service.MetroService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/metro")
-class MetroController(private val metroService: FakeMetroService) {
+class MetroController(private val metroService: MetroService) {
     @GetMapping("/")
     fun getAllMetro(): Flow<Metro> =
         metroService.getMetros().also {

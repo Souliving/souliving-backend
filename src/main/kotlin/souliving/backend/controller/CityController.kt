@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.model.locations.City
-import souliving.backend.service.fake.FakeCityService
+import souliving.backend.service.CityService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/cities")
-class CityController(private var cityService: FakeCityService) {
+class CityController(private var cityService: CityService) {
 
     @GetMapping("/")
     fun getAllCities(): Flow<City> =
@@ -21,7 +21,7 @@ class CityController(private var cityService: FakeCityService) {
 
     @GetMapping("/{id}")
     suspend fun getCityById(@PathVariable id: Long): City =
-        cityService.getCitiesById(id)?.let {
+        cityService.getCityById(id)?.let {
             logResponse("Find city with id: $id")
             it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "City with id $id not found")

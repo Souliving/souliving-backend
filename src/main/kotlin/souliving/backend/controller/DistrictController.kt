@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.model.locations.District
-import souliving.backend.service.fake.FakeDistrictService
+import souliving.backend.service.DistrictService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/district")
-class DistrictController(private var districtService: FakeDistrictService) {
+class DistrictController(private var districtService: DistrictService) {
     @GetMapping("/")
     fun getAllDistricts(): Flow<District> =
         districtService.getDistricts().also {

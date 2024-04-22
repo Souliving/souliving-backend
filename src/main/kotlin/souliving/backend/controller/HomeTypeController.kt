@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.model.home.HomeType
-import souliving.backend.service.fake.FakeHomeTypeService
+import souliving.backend.service.HomeTypeService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/homeType")
-class HomeTypeController(private val homeTypeService: FakeHomeTypeService) {
+class HomeTypeController(private val homeTypeService: HomeTypeService) {
 
     @GetMapping("/")
     fun getAllHomeTypes(): Flow<HomeType> =

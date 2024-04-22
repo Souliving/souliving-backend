@@ -1,10 +1,16 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.flow.Flow
+import org.springframework.stereotype.Service
 import souliving.backend.model.locations.City
+import souliving.backend.repository.CityRepository
 
-interface CityService {
-    fun getCities(): Flow<City>
+@Service
+class CityService(
+    private val cityRepository: CityRepository
+) {
+    fun getCities(): Flow<City> = cityRepository.findAll()
 
-    suspend fun getCitiesById(id: Long): City?
+    suspend fun getCityById(id: Long): City? =
+        cityRepository.findById(id)
 }

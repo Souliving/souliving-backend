@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.model.home.HomeOwner
-import souliving.backend.service.fake.FakeHomeOwnerService
+import souliving.backend.service.HomeOwnerService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/homeOwner")
-class HomeOwnerController(private var homeOwnerService: FakeHomeOwnerService) {
+class HomeOwnerController(private var homeOwnerService: HomeOwnerService) {
 
 
     @GetMapping("/")

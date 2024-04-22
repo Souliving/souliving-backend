@@ -7,12 +7,13 @@ import org.springframework.web.server.ResponseStatusException
 import souliving.backend.dto.FormDto
 import souliving.backend.dto.ShortFormDto
 import souliving.backend.logger.logResponse
-import souliving.backend.service.fake.FakeFormService
+import souliving.backend.model.Properties
+import souliving.backend.service.FormService
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/form")
-class FormController(private var formService: FakeFormService) {
+class FormController(private var formService: FormService) {
 
     @GetMapping("/")
     fun getAllForms(): Flow<FormDto> =
@@ -36,4 +37,12 @@ class FormController(private var formService: FakeFormService) {
             logResponse("Get all short forms")
             it
         }
+
+    @GetMapping("/getShortFormsByProperties")
+    suspend fun getShortFormsByProperties(@RequestBody properties: Properties): Flow<ShortFormDto> =
+        formService.getShortFormsByProperties(properties).let {
+            logResponse("Get all short forms by properties : $properties")
+            it
+        }
+
 }
