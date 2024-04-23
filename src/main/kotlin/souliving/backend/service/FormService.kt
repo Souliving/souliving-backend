@@ -66,22 +66,22 @@ class FormService(
     suspend fun Form.toShortDto(): ShortFormDto = fetchDataForShortFormDto(this)
 
     private suspend fun fetchDataForShortFormDto(form: Form): ShortFormDto = withContext(Dispatchers.IO) {
-        val city = async { cityService.getCityById(form.cityId!!) }.await()
-        val properties = async { propertiesService.getPropertiesById(form.propertiesId!!) }.await()
-        val metro = async { metroService.getMetroById(form.metroId) }.await()
-        val district = async { districtService.getDistrictById(form.districtId!!) }.await()
+        val city = async { cityService.getCityById(form.cityId!!) }
+        val properties = async { propertiesService.getPropertiesById(form.propertiesId!!) }
+        val metro = async { metroService.getMetroById(form.metroId) }
+        val district = async { districtService.getDistrictById(form.districtId!!) }
         val user = async { userService.findById(form.userId!!) }.await()!!
         ShortFormDto(
             form.id,
             user.name!!,
             user.age,
-            city,
-            district,
-            metro,
+            city.await(),
+            district.await(),
+            metro.await(),
             form.budget,
             form.description,
             form.dateMove,
-            properties,
+            properties.await(),
             form.photoId,
             form.onlineDateTime
         )
