@@ -11,5 +11,5 @@ data class Properties(
     var alcohol: Boolean,
     var petFriendly: Boolean,
     var isClean: Boolean,
-    var homeOwnerId: Int
+    var homeOwnerId: Int? = null
 )
