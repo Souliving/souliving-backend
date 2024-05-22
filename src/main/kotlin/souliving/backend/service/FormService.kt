@@ -4,20 +4,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
+import org.springframework.r2dbc.core.flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import souliving.backend.dto.FormDto
 import souliving.backend.dto.MetroFormDto
+import souliving.backend.dto.PlainShortFormDto
 import souliving.backend.dto.ShortFormDto
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toShortForm
 import souliving.backend.model.Form
 import souliving.backend.model.Properties
 import souliving.backend.repository.FormRepository
+import java.time.LocalDateTime
 
 
 @Service
@@ -64,6 +68,53 @@ class FormService(
         }
         return true
     }
+
+    @Transactional
+    suspend fun addFavoriteForm(mainFormId: Long, favFormId: Long): Long {
+        databaseClient.sql("INSERT INTO favorite_forms(main_form_id, fav_form_id) VALUES (:mainFormId, :favFormId)")
+            .bind("mainFormId", mainFormId).bind("favFormId", favFormId)
+            .fetch().awaitRowsUpdated()
+        return mainFormId
+    }
+
+    @Transactional
+    suspend fun deleteFavoriteForm(mainFormId: Long, favFormId: Long): Boolean {
+        return databaseClient.sql("DELETE FROM favorite_forms WHERE main_form_id = :mainFormId and fav_form_id = :favFormId")
+            .bind("mainFormId", mainFormId).bind("favFormId", favFormId).fetch().awaitRowsUpdated() != 0L
+    }
+
+    suspend fun getAllFavoriteFormByFormId(formId: Long): List<ShortFormDto> {
+        val result =
+            databaseClient.sql("select * from get_fav_forms_by_form_id(:formId)").bind("formId", formId).fetch().flow()
+                .toList()
+        val favForms = result.map {
+            PlainShortFormDto(
+                id = it["id"] as Long,
+                name = it["name"] as String,
+                age = (it["age"] as Long).toInt(),
+                cityid = it["cityid"] as Long,
+                cityname = it["cityname"] as String,
+                districtid = it["districtid"] as Long,
+                districtname = it["districtname"] as String,
+                districtcityid = it["districtcityid"] as Long,
+                metro = it["metro"] as String,
+                budget = it["budget"] as Long,
+                description = it["description"] as String,
+                datemove = it["datemove"] as LocalDateTime,
+                propertiesid = it["propertiesid"] as Long,
+                smoking = it["smoking"] as Boolean,
+                alcohol = it["alcohol"] as Boolean,
+                petfriendly = it["petfriendly"] as Boolean,
+                isclean = it["isclean"] as Boolean,
+                homeownerid = (it["homeownerid"] as Long).toInt(),
+                photoid = it["photoid"] as Long,
+                onlinedatetime = it["onlinedatetime"] as LocalDateTime,
+            )
+        }
+        return favForms.map { it.toShortForm() }
+
+    }
+
 
     suspend fun Form.toDto(): FormDto = fetchDataForFormDto(this)
 

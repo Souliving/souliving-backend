@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.FavFormDto
 import souliving.backend.dto.FormDto
 import souliving.backend.dto.MetroFormDto
 import souliving.backend.dto.ShortFormDto
@@ -50,6 +51,32 @@ class FormController(private var formService: FormService) {
     suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {
         formService.updateMetrosInForm(newMetros).let {
             logResponse("Update metro in form : ${newMetros.formId}")
+        }
+    }
+
+    @GetMapping("/getFavoriteFormsByFormId/{formId}")
+    suspend fun getFavoriteFormsByFormId(@PathVariable formId: Long): List<ShortFormDto> =
+        formService.getAllFavoriteFormByFormId(formId).let {
+            logResponse("Get favorite form by formId : $formId")
+            it
+        }
+
+
+    @DeleteMapping("/deleteFavoriteForm")
+    suspend fun deleteFavoriteForm(@RequestBody fvDto: FavFormDto) {
+        val mainFormId = fvDto.mainFormId
+        val favFormId = fvDto.favFormId
+        formService.deleteFavoriteForm(mainFormId, favFormId).let {
+            logResponse("Delete favorite form by formId : $mainFormId")
+        }
+    }
+
+    @PutMapping("/addFavoriteForm")
+    suspend fun addFavoriteForm(@RequestBody fvDto: FavFormDto) {
+        val mainFormId = fvDto.mainFormId
+        val favFormId = fvDto.favFormId
+        formService.addFavoriteForm(mainFormId, favFormId).let {
+            logResponse("Add favorite form by formId : $mainFormId")
         }
     }
 }
