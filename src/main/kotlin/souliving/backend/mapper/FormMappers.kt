@@ -38,7 +38,7 @@ fun parseMetro(metroJson: String): List<Metro> {
     val model: List<Map<String, String>> = mapper.readValue(metroJson)
     val metroList = mutableListOf<Metro>()
     model.forEach { metro ->
-        metroList.add(Metro(metro["id"]!!.toLong(), metro["name"]!!, metro["cityId"]!!.toLong()))
+        metroList.add(Metro(metro["id"]?.toLong(), metro["name"].toString(), metro["cityId"]?.toLong()))
     }
     return metroList
 }

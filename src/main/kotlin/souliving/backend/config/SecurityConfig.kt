@@ -39,6 +39,7 @@ class SecurityConfig : WebFluxConfigurer {
             .authorizeExchange {
                 it.pathMatchers(HttpMethod.GET, *whiteList).permitAll()
                     .pathMatchers(HttpMethod.POST, *whiteList).permitAll()
+                    .pathMatchers(HttpMethod.PUT, *whiteList).permitAll()
                     .pathMatchers("api/v1/users/**").hasAuthority(UserRole.ADMIN.toString())
                     .anyExchange().authenticated()
             }

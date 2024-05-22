@@ -6,8 +6,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.awaitRowsUpdated
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import souliving.backend.dto.FormDto
+import souliving.backend.dto.MetroFormDto
 import souliving.backend.dto.ShortFormDto
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toShortForm
@@ -31,6 +35,8 @@ class FormService(
     private val districtService: DistrictService,
     @Autowired
     private val userService: UserService,
+    @Autowired
+    private val databaseClient: DatabaseClient,
 ) {
 
     fun getAllForms(): Flow<FormDto> = formRepository.getForms().map { it.toFormDto() }
@@ -46,6 +52,17 @@ class FormService(
 
     suspend fun getShortFormsByProperties(properties: Properties): Flow<ShortFormDto> {
         return formRepository.getShortForms().map { it.toShortForm() }
+    }
+
+    @Transactional
+    suspend fun updateMetrosInForm(mfDto: MetroFormDto): Boolean {
+        databaseClient.sql("call DELETE_METRO(:formId)").bind("formId", mfDto.formId!!).fetch().awaitRowsUpdated()
+
+        mfDto.metroIds!!.forEach { metroId ->
+            databaseClient.sql("INSERT INTO form_metro_ids(form_id, metro_id) VALUES (:formId, :metroId)")
+                .bind("formId", mfDto.formId!!).bind("metroId", metroId).fetch().awaitRowsUpdated()
+        }
+        return true
     }
 
     suspend fun Form.toDto(): FormDto = fetchDataForFormDto(this)

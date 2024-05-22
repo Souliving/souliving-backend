@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.dto.FormDto
+import souliving.backend.dto.MetroFormDto
 import souliving.backend.dto.ShortFormDto
 import souliving.backend.logger.logResponse
 import souliving.backend.model.Properties
@@ -45,4 +46,10 @@ class FormController(private var formService: FormService) {
             it
         }
 
+    @PutMapping("/updateMetroInForm")
+    suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {
+        formService.updateMetrosInForm(newMetros).let {
+            logResponse("Update metro in form : ${newMetros.formId}")
+        }
+    }
 }
