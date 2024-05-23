@@ -88,28 +88,7 @@ class FormService(
             databaseClient.sql("select * from get_fav_forms_by_form_id(:formId)").bind("formId", formId).fetch().flow()
                 .toList()
         val favForms = result.map {
-            PlainShortFormDto(
-                id = it["id"] as Long,
-                name = it["name"] as String,
-                age = (it["age"] as Long).toInt(),
-                cityid = it["cityid"] as Long,
-                cityname = it["cityname"] as String,
-                districtid = it["districtid"] as Long,
-                districtname = it["districtname"] as String,
-                districtcityid = it["districtcityid"] as Long,
-                metro = it["metro"] as String,
-                budget = it["budget"] as Long,
-                description = it["description"] as String,
-                datemove = it["datemove"] as LocalDateTime,
-                propertiesid = it["propertiesid"] as Long,
-                smoking = it["smoking"] as Boolean,
-                alcohol = it["alcohol"] as Boolean,
-                petfriendly = it["petfriendly"] as Boolean,
-                isclean = it["isclean"] as Boolean,
-                homeownerid = (it["homeownerid"] as Long).toInt(),
-                photoid = it["photoid"] as Long,
-                onlinedatetime = it["onlinedatetime"] as LocalDateTime,
-            )
+            it.parseToShortDto()
         }
         return favForms.map { it.toShortForm() }
 
@@ -130,6 +109,31 @@ class FormService(
             form.socialMediaListId,
             form.rating,
             form.reviews
+        )
+    }
+
+    suspend fun Map<String, Any>.parseToShortDto(): PlainShortFormDto {
+        return PlainShortFormDto(
+            id = this["id"] as Long,
+            name = this["name"] as String,
+            age = (this["age"] as Long).toInt(),
+            cityid = this["cityid"] as Long,
+            cityname = this["cityname"] as String,
+            districtid = this["districtid"] as Long,
+            districtname = this["districtname"] as String,
+            districtcityid = this["districtcityid"] as Long,
+            metro = this["metro"] as String,
+            budget = this["budget"] as Long,
+            description = this["description"] as String,
+            datemove = this["datemove"] as LocalDateTime,
+            propertiesid = this["propertiesid"] as Long,
+            smoking = this["smoking"] as Boolean,
+            alcohol = this["alcohol"] as Boolean,
+            petfriendly = this["petfriendly"] as Boolean,
+            isclean = this["isclean"] as Boolean,
+            homeownerid = (this["homeownerid"] as Long).toInt(),
+            photoid = this["photoid"] as Long,
+            onlinedatetime = this["onlinedatetime"] as LocalDateTime
         )
     }
 
