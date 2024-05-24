@@ -1,11 +1,8 @@
 package souliving.backend.service
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
@@ -18,7 +15,6 @@ import souliving.backend.dto.PlainShortFormDto
 import souliving.backend.dto.ShortFormDto
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toShortForm
-import souliving.backend.model.Form
 import souliving.backend.model.Properties
 import souliving.backend.repository.FormRepository
 import java.time.LocalDateTime
@@ -92,24 +88,6 @@ class FormService(
         }
         return favForms.map { it.toShortForm() }
 
-    }
-
-
-    suspend fun Form.toDto(): FormDto = fetchDataForFormDto(this)
-
-    private suspend fun fetchDataForFormDto(form: Form): FormDto = withContext(Dispatchers.IO) {
-
-        val homeType = async { homeTypeService.getHomeTypeById(form.homeTypeId!!) }
-
-        FormDto(
-            form.id,
-            form.userId,
-            form.description,
-            homeType.await(),
-            form.socialMediaListId,
-            form.rating,
-            form.reviews
-        )
     }
 
     suspend fun Map<String, Any>.parseToShortDto(): PlainShortFormDto {
