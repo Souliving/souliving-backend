@@ -5,4 +5,5 @@ import souliving.backend.model.image.Image
 
 interface ImageRepository : CoroutineCrudRepository<Image, Long> {
     suspend fun findByName(name: String): Image
+    override suspend fun findById(id: Long): Image
 }

@@ -50,4 +50,18 @@ class ImageService(
                 .addContextValue("Image name", imageName)
         }
     }
+    suspend fun downloadImageById(id: Long): ByteArray? {
+        val dbImage: Image = imageRepository.findById(id)
+        try {
+            return ImageUtils.decompressImage(dbImage.container)
+        } catch (exception: DataFormatException) {
+            throw ContextedRuntimeException("Error downloading an image", exception)
+                .addContextValue("Image ID", dbImage.id)
+                .addContextValue("Image name", dbImage.name)
+        } catch (exception: IOException) {
+            throw ContextedRuntimeException("Error downloading an image", exception)
+                .addContextValue("Image ID", dbImage.id)
+                .addContextValue("Image name", dbImage.name)
+        }
+    }
 }
