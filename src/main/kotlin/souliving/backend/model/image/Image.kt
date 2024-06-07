@@ -1,9 +1,6 @@
 package souliving.backend.model.image
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Lob
+import jakarta.persistence.*
 import org.springframework.data.relational.core.mapping.Table
 import souliving.backend.model.NoArg
 
@@ -12,6 +9,7 @@ import souliving.backend.model.NoArg
 @Table("photos")
 data class Image(
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null,
     var name: String,
     var type: String,

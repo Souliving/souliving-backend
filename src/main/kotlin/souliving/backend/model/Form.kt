@@ -1,5 +1,7 @@
 package souliving.backend.model
 
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
@@ -7,6 +9,7 @@ import java.time.LocalDateTime
 @Table("form")
 data class Form(
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null,
     var userId: Long? = null,
     var description: String,
