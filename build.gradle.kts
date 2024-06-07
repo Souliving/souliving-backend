@@ -1,13 +1,11 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.noarg") version "1.9.22"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.spring") version "2.0.0"
+    kotlin("plugin.noarg") version "2.0.0"
 }
 
 noArg {
@@ -16,7 +14,7 @@ noArg {
 
 group = "souliving-backend"
 version = "0.0.1-SNAPSHOT"
-archivesName = "souliving-backend"
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -61,12 +59,6 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "21"
-    }
-}
 
 tasks.withType<Test> {
     useJUnitPlatform()
