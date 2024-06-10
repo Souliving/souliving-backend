@@ -9,10 +9,7 @@ import org.springframework.r2dbc.core.awaitRowsUpdated
 import org.springframework.r2dbc.core.flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import souliving.backend.dto.FormDto
-import souliving.backend.dto.MetroFormDto
-import souliving.backend.dto.PlainShortFormDto
-import souliving.backend.dto.ShortFormDto
+import souliving.backend.dto.*
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toShortForm
 import souliving.backend.model.Properties
@@ -52,6 +49,22 @@ class FormService(
 
     suspend fun getShortFormsByProperties(properties: Properties): Flow<ShortFormDto> {
         return formRepository.getShortForms().map { it.toShortForm() }
+    }
+
+    suspend fun getShortFormsWithFilter(filter: FilterDto): List<ShortFormDto> {
+        val result =
+            databaseClient.sql("select * from get_short_forms_with_filter(array[:cityIds], array[:metroIds], :smoking, :alcohol, :petFriendly, :isClean)")
+                .bind("cityIds", filter.cityId)
+                .bind("metroIds", filter.metroIds)
+                .bind("smoking", filter.smoking)
+                .bind("alcohol", filter.alcohol)
+                .bind("petFriendly", filter.petFriendly)
+                .bind("isClean", filter.isClean).fetch().flow().toList()
+
+        val filteredForms = result.map {
+            it.parseToShortDto()
+        }
+        return filteredForms.map { it.toShortForm() }
     }
 
     @Transactional

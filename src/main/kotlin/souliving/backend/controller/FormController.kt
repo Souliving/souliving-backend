@@ -4,10 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import souliving.backend.dto.FavFormDto
-import souliving.backend.dto.FormDto
-import souliving.backend.dto.MetroFormDto
-import souliving.backend.dto.ShortFormDto
+import souliving.backend.dto.*
 import souliving.backend.logger.logResponse
 import souliving.backend.model.Properties
 import souliving.backend.service.FormService
@@ -46,6 +43,16 @@ class FormController(private var formService: FormService) {
             logResponse("Get all short forms by properties : $properties")
             it
         }
+    
+    @PostMapping("/getShortFormsWithFilter")
+    suspend fun getShortFormsWithFilter(@RequestBody filter: FilterDto): List<ShortFormDto> =
+        formService.getShortFormsWithFilter(
+            filter
+        ).let {
+            logResponse("Get all short forms by filter : $filter")
+            it
+        }
+
 
     @PutMapping("/updateMetroInForm")
     suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {
