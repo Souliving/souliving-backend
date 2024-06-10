@@ -42,7 +42,7 @@ class FormService(
     fun getAllForms(): Flow<FormDto> = formRepository.getForms().map { it.toFormDto() }
 
     suspend fun getFormByUserId(id: Long): FormDto? =
-        formRepository.findByUserId(id)?.toFormDto()
+        formRepository.findPlainDtoByUserId(id)?.toFormDto()
 
     suspend fun getShortForms(): Flow<ShortFormDto> =
         formRepository.getShortForms().map { it.toShortForm() }

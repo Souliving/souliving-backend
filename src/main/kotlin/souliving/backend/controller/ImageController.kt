@@ -44,4 +44,13 @@ class ImageController(
             .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
             .body<ByteArray>(imageData)
     }
+
+    @GetMapping("getImageByUserId/{userId}")
+    suspend fun getImageByUserId(@PathVariable userId: Long): ResponseEntity<*> {
+        val imageData: ByteArray? = imageService.downloadImageByUserId(userId)
+        logResponse("Download image by user id: $userId")
+        return ResponseEntity.status(HttpStatus.OK)
+            .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
+            .body<ByteArray>(imageData)
+    }
 }

@@ -12,8 +12,10 @@ import souliving.backend.model.Form
 interface FormRepository : CoroutineCrudRepository<Form, Long> {
 
     @Query("select * from get_forms_by_user_id(:userId)")
-    suspend fun findByUserId(userId: Long): PlainFormDto?
+    suspend fun findPlainDtoByUserId(userId: Long): PlainFormDto?
 
+    @Query("select * from form where user_id = (:userId)")
+    suspend fun findFormByUserId(userId: Long): Flow<Form>
 //    @Procedure(name = "GET_SHORT_FORMS")
 //    fun findShort(): Flow<PlainShortFormDto>
 

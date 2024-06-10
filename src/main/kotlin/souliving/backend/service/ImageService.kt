@@ -1,6 +1,7 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.apache.commons.lang3.exception.ContextedRuntimeException
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,7 +9,9 @@ import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import souliving.backend.model.image.Image
+import souliving.backend.repository.FormRepository
 import souliving.backend.repository.ImageRepository
+import souliving.backend.repository.UserRepository
 import souliving.backend.utils.ImageUtils
 import java.io.IOException
 import java.util.*
@@ -18,7 +21,11 @@ import java.util.zip.DataFormatException
 @Service
 class ImageService(
     @Autowired
-    val imageRepository: ImageRepository
+    val imageRepository: ImageRepository,
+    @Autowired
+    val userRepository: UserRepository,
+    @Autowired
+    val formRepository: FormRepository
 ) {
     @Throws(IOException::class)
     suspend fun uploadImage(imageFile: FilePart): String {
@@ -52,6 +59,16 @@ class ImageService(
     }
     suspend fun downloadImageById(id: Long): ByteArray? {
         val dbImage: Image = imageRepository.findById(id)
+        return decompressImage(dbImage)
+    }
+
+    suspend fun downloadImageByUserId(userId: Long): ByteArray? {
+        val form = formRepository.findFormByUserId(userId).first()
+        val dbImage: Image = imageRepository.findById(form.photoId!!)
+        return decompressImage(dbImage)
+    }
+
+    fun decompressImage(dbImage: Image): ByteArray? {
         try {
             return ImageUtils.decompressImage(dbImage.container)
         } catch (exception: DataFormatException) {
