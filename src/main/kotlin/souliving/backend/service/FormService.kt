@@ -52,14 +52,8 @@ class FormService(
     }
 
     suspend fun getShortFormsWithFilter(filter: FilterDto): List<ShortFormDto> {
-        val result =
-            databaseClient.sql("select * from get_short_forms_with_filter(array[:cityIds], array[:metroIds], :smoking, :alcohol, :petFriendly, :isClean)")
-                .bind("cityIds", filter.cityId)
-                .bind("metroIds", filter.metroIds)
-                .bind("smoking", filter.smoking)
-                .bind("alcohol", filter.alcohol)
-                .bind("petFriendly", filter.petFriendly)
-                .bind("isClean", filter.isClean).fetch().flow().toList()
+        val result = buildFilterRequest(filter)
+            .fetch().flow().toList()
 
         val filteredForms = result.map {
             it.parseToShortDto()
@@ -128,4 +122,48 @@ class FormService(
         )
     }
 
+    private fun buildFilterRequest(filter: FilterDto): DatabaseClient.GenericExecuteSpec {
+        var cityIdsString = "array[:cityIds]"
+        if (filter.cityId.isEmpty())
+            cityIdsString = "null"
+        var metroIdsString = "array[:metroIds]"
+        if (filter.metroIds.isEmpty())
+            metroIdsString = "null"
+        var smokingString = ":smoking"
+        if(filter.smoking == null)
+            smokingString = "null"
+        var alcoholString = ":alcoholString"
+        if(filter.alcohol == null)
+            alcoholString = "null"
+        var petFriendlyString = ":petFriendly"
+        if(filter.petFriendly == null)
+            petFriendlyString = "null"
+        var isCleanString = ":isClean"
+        if(filter.isClean == null)
+            isCleanString = "null"
+
+        val sqlString =  "select * from" +
+            " get_short_forms_with_filter" +
+            "($cityIdsString, $metroIdsString, $smokingString, $alcoholString, $petFriendlyString, $isCleanString)"
+
+        var sql =
+            databaseClient.sql(
+               sqlString
+            )
+        if (cityIdsString != "null")
+            sql = sql.bind("cityIds", filter.cityId)
+        if (metroIdsString != "null")
+           sql =  sql.bind("metroIds", filter.metroIds)
+
+        if (smokingString != "null")
+            sql = sql.bind("smoking", filter.smoking!!)
+        if (alcoholString != "null")
+            sql =  sql.bind("alcohol", filter.alcohol!!)
+        if (petFriendlyString != "null")
+            sql = sql.bind("petFriendly", filter.petFriendly!!)
+        if (isCleanString != "null")
+            sql = sql.bind("isClean", filter.isClean!!)
+
+        return sql
+    }
 }

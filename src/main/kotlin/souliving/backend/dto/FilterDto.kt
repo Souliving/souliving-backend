@@ -6,8 +6,8 @@ import souliving.backend.model.NoArg
 data class FilterDto(
     val cityId: List<Long>,
     val metroIds: List<Long>,
-    val smoking: Boolean,
-    val alcohol: Boolean,
-    val petFriendly: Boolean,
-    val isClean: Boolean
+    val smoking: Boolean?,
+    val alcohol: Boolean?,
+    val petFriendly: Boolean?,
+    val isClean: Boolean?
 )
