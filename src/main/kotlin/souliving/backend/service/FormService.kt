@@ -123,47 +123,34 @@ class FormService(
     }
 
     private fun buildFilterRequest(filter: FilterDto): DatabaseClient.GenericExecuteSpec {
-        var cityIdsString = "array[:cityIds]"
-        if (filter.cityId.isEmpty())
-            cityIdsString = "null"
-        var metroIdsString = "array[:metroIds]"
-        if (filter.metroIds.isEmpty())
-            metroIdsString = "null"
-        var smokingString = ":smoking"
-        if (filter.smoking == null)
-            smokingString = "null"
-        var alcoholString = ":alcoholString"
-        if (filter.alcohol == null)
-            alcoholString = "null"
-        var petFriendlyString = ":petFriendly"
-        if (filter.petFriendly == null)
-            petFriendlyString = "null"
-        var isCleanString = ":isClean"
-        if (filter.isClean == null)
-            isCleanString = "null"
-
         val sqlString = "select * from" +
             " get_short_forms_with_filter" +
-            "($cityIdsString, $metroIdsString, $smokingString, $alcoholString, $petFriendlyString, $isCleanString)"
+            "(${filter.cityId.buildSqlParameter()}, ${filter.metroIds.buildSqlParameter()}," +
+            " ${filter.smoking.buildSqlParameter()}, ${filter.alcohol.buildSqlParameter()}," +
+            " ${filter.petFriendly.buildSqlParameter()}, ${filter.isClean.buildSqlParameter()})"
 
-        var sql =
-            databaseClient.sql(
-                sqlString
-            )
-
-        if (cityIdsString != "null")
-            sql = sql.bind("cityIds", filter.cityId)
-        if (metroIdsString != "null")
-            sql = sql.bind("metroIds", filter.metroIds)
-        if (smokingString != "null")
-            sql = sql.bind("smoking", filter.smoking!!)
-        if (alcoholString != "null")
-            sql = sql.bind("alcohol", filter.alcohol!!)
-        if (petFriendlyString != "null")
-            sql = sql.bind("petFriendly", filter.petFriendly!!)
-        if (isCleanString != "null")
-            sql = sql.bind("isClean", filter.isClean!!)
-
+        val sql = databaseClient.sql(
+            sqlString
+        )
         return sql
+    }
+
+    private fun List<Long>.buildSqlParameter(): String {
+        if (this.isEmpty()) {
+            return "null"
+        }
+        var result = "array["
+        this.forEach {
+            result += "$it::bigint,"
+        }
+        result = result.substring(0, result.length - 1)
+        result = result.plus("]")
+        return result
+    }
+
+    private fun Boolean?.buildSqlParameter(): String {
+        if (this == null)
+            return "null"
+        return this.toString()
     }
 }
