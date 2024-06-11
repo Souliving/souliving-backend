@@ -1,0 +1,322 @@
+CREATE OR REPLACE FUNCTION get_short_forms()
+    RETURNS TABLE
+            (
+                id             bigint,
+                name           varchar(64),
+                age            bigint,
+                cityId         bigint,
+                cityName       varchar(64),
+                districtId     bigint,
+                districtName   varchar(64),
+                districtCityId bigint,
+                metroId        bigint,
+                metroName      varchar(64),
+                metroCityId    bigint,
+                budget         bigint,
+                description    text,
+                dateMove       timestamp,
+                propertiesid   bigint,
+                smoking        boolean,
+                alcohol        boolean,
+                petFriendly    boolean,
+                isClean        boolean,
+                homeOwnerId    bigint,
+                photoid        bigint,
+                onlineDateTime timestamp
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id               as id,
+                        u.name                as name,
+                        u.age                 as age,
+                        c.id                  as cityId,
+                        c.name                as cityName,
+                        d.id                  as districtId,
+                        d.name                as districtName,
+                        d.city_id             as districtCityId,
+                        ms.id                 as metroId,
+                        ms.name               as metroName,
+                        ms.city_id            as metroCityId,
+                        form.budget           as budget,
+                        form.description      as description,
+                        form.date_move        as dateMove,
+                        pr.id                 as propertiesid,
+                        pr.smoking            as smoking,
+                        pr.alcohol            as alcohol,
+                        pr.pet_friendly       as petFriendly,
+                        pr.is_clean           as isClean,
+                        pr.home_owner_id      as homeOwnerId,
+                        form.photo_id         as photoid,
+                        form.online_date_time as onlineDateTime
+                 from form
+                          inner join users u on form.user_id = u.id
+                          inner join home_type ht on form.home_type_id = ht.id
+                          inner join properties p on form.properties_id = p.id
+                          inner join public.city c on form.city_id = c.id
+                          inner join public.district d on form.district_id = d.id
+                          inner join public.metro ms on form.metro_id = ms.id
+                          inner join properties pr on form.properties_id = pr.id;
+END;
+$$;
+
+select *
+from get_short_forms();
+
+CREATE OR REPLACE FUNCTION get_forms()
+    RETURNS TABLE
+            (
+                id           bigint,
+                userId       bigint,
+                description  text,
+                homeTypeId   bigint,
+                homeTypeName varchar(64),
+                socialMedia  bigint,
+                rating       double precision,
+                reviews      varchar(64)
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id              as id,
+                        form.user_id         as userId,
+                        form.description     as description,
+                        ht.id                as homeTypeId,
+                        ht.name              as homeTypeName,
+                        form.social_media_id as socialMedia,
+                        form.rating          as rating,
+                        form.reviews         as reviews
+                 from form
+                          inner join home_type ht on form.home_type_id = ht.id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_forms_by_user_id(userOfId bigint)
+    RETURNS TABLE
+            (
+                id           bigint,
+                userId       bigint,
+                description  text,
+                homeTypeId   bigint,
+                homeTypeName varchar(64),
+                socialMedia  bigint,
+                rating       double precision,
+                reviews      varchar(64)
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id              as id,
+                        form.user_id         as userId,
+                        form.description     as description,
+                        ht.id                as homeTypeId,
+                        ht.name              as homeTypeName,
+                        form.social_media_id as socialMedia,
+                        form.rating          as rating,
+                        form.reviews         as reviews
+                 from form
+                          inner join home_type ht on form.home_type_id = ht.id
+                 where form.user_id = userOfId;
+END;
+$$;
+
+drop function get_forms;
+select * from get_forms();
+select * from get_forms_by_user_id(4);
+
+CREATE OR REPLACE FUNCTION get_short_forms()
+    RETURNS TABLE
+            (
+                id             bigint,
+                name           varchar(64),
+                age            bigint,
+                cityId         bigint,
+                cityName       varchar(64),
+                districtId     bigint,
+                districtName   varchar(64),
+                districtCityId bigint,
+                metroId        bigint,
+                metroName      varchar(64),
+                metroCityId    bigint,
+                budget         bigint,
+                description    text,
+                dateMove       timestamp,
+                propertiesid   bigint,
+                smoking        boolean,
+                alcohol        boolean,
+                petFriendly    boolean,
+                isClean        boolean,
+                homeOwnerId    bigint,
+                photoid        bigint,
+                onlineDateTime timestamp
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id               as id,
+                        u.name                as name,
+                        u.age                 as age,
+                        c.id                  as cityId,
+                        c.name                as cityName,
+                        d.id                  as districtId,
+                        d.name                as districtName,
+                        d.city_id             as districtCityId,
+                        ms.id                 as metroId,
+                        ms.name               as metroName,
+                        ms.city_id            as metroCityId,
+                        form.budget           as budget,
+                        form.description      as description,
+                        form.date_move        as dateMove,
+                        pr.id                 as propertiesid,
+                        pr.smoking            as smoking,
+                        pr.alcohol            as alcohol,
+                        pr.pet_friendly       as petFriendly,
+                        pr.is_clean           as isClean,
+                        pr.home_owner_id      as homeOwnerId,
+                        form.photo_id         as photoid,
+                        form.online_date_time as onlineDateTime
+                 from form
+                          inner join users u on form.user_id = u.id
+                          inner join home_type ht on form.home_type_id = ht.id
+                          inner join properties p on form.properties_id = p.id
+                          inner join public.city c on form.city_id = c.id
+                          inner join public.district d on form.district_id = d.id
+                          inner join public.metro ms on form.metro_id = ms.id
+                          inner join properties pr on form.properties_id = pr.id;
+END;
+$$;
+
+select *
+from get_short_forms();
+
+CREATE OR REPLACE FUNCTION get_forms()
+    RETURNS TABLE
+            (
+                id           bigint,
+                userId       bigint,
+                description  text,
+                homeTypeId   bigint,
+                homeTypeName varchar(64),
+                socialMedia  bigint,
+                rating       double precision,
+                reviews      varchar(64)
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id              as id,
+                        form.user_id         as userId,
+                        form.description     as description,
+                        ht.id                as homeTypeId,
+                        ht.name              as homeTypeName,
+                        form.social_media_id as socialMedia,
+                        form.rating          as rating,
+                        form.reviews         as reviews
+                 from form
+                          inner join home_type ht on form.home_type_id = ht.id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_forms_by_user_id(userOfId bigint)
+    RETURNS TABLE
+            (
+                id           bigint,
+                userId       bigint,
+                description  text,
+                homeTypeId   bigint,
+                homeTypeName varchar(64),
+                socialMedia  bigint,
+                rating       double precision,
+                reviews      varchar(64)
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id              as id,
+                        form.user_id         as userId,
+                        form.description     as description,
+                        ht.id                as homeTypeId,
+                        ht.name              as homeTypeName,
+                        form.social_media_id as socialMedia,
+                        form.rating          as rating,
+                        form.reviews         as reviews
+                 from form
+                          inner join home_type ht on form.home_type_id = ht.id
+                 where form.user_id = userOfId;
+END;
+$$;
+
+drop function get_forms;
+select * from get_forms();
+select * from get_forms_by_user_id(4);
+
+drop function get_short_forms();
+CREATE OR REPLACE FUNCTION get_short_forms()
+    RETURNS TABLE
+            (
+                id             bigint,
+                name           varchar(64),
+                age            bigint,
+                "cityId"         bigint,
+                "cityName"      varchar(64),
+                "districtId"     bigint,
+                "districtName"   varchar(64),
+                "districtCityId" bigint,
+                metro varchar,
+                budget         bigint,
+                description    text,
+                "dateMove"       timestamp,
+                "propertiesId"   bigint,
+                smoking        boolean,
+                alcohol        boolean,
+                "petFriendly"    boolean,
+                "isClean"        boolean,
+                "homeOwnerId"    bigint,
+                "photoId"        bigint,
+                "onlineDateTime" timestamp
+            )
+    LANGUAGE 'plpgsql'
+AS
+$$
+BEGIN
+    RETURN QUERY select form.id               as id,
+                        u.name                as name,
+                        u.age                 as age,
+                        c.id                  as "cityId",
+                        c.name                as "cityName",
+                        d.id                  as "districtId",
+                        d.name                as "districtName",
+                        d.city_id             as "districtCityId",
+                        json_agg(json_build_object('id', ms.id, 'name', ms.name, 'cityId', ms.city_id))::varchar as metro,
+                        form.budget           as budget,
+                        form.description      as description,
+                        form.date_move        as "dateMove",
+                        pr.id                 as "propertiesId",
+                        pr.smoking            as smoking,
+                        pr.alcohol            as alcohol,
+                        pr.pet_friendly       as "petFriendly",
+                        pr.is_clean           as "isClean",
+                        pr.home_owner_id      as "homeOwnerId",
+                        form.photo_id         as "photoId",
+                        form.online_date_time as "onlineDateTime"
+                 from form
+                          inner join users u on form.user_id = u.id
+                          inner join home_type ht on form.home_type_id = ht.id
+                          inner join properties p on form.properties_id = p.id
+                          inner join public.city c on form.city_id = c.id
+                          inner join public.district d on form.district_id = d.id
+                          inner join form_metro_ids fmi on form.id = fmi.form_id
+                          inner join public.metro ms on fmi.metro_id = ms.id
+                          inner join properties pr on form.properties_id = pr.id
+                 group by form.id, u.name, u.age, c.id, c.name, d.id, d.name, d.city_id, form.budget, form.description, form.date_move, pr.id, pr.smoking, pr.alcohol, pr.pet_friendly, pr.is_clean, pr.home_owner_id, form.photo_id, form.online_date_time;
+END;
+$$;
+
+select * from get_new_short_forms();
+

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 import souliving.backend.model.image.Image
 import souliving.backend.repository.FormRepository
 import souliving.backend.repository.ImageRepository
-import souliving.backend.repository.UserRepository
 import souliving.backend.utils.ImageUtils
 import java.io.IOException
 import java.util.*
@@ -22,8 +21,6 @@ import java.util.zip.DataFormatException
 class ImageService(
     @Autowired
     val imageRepository: ImageRepository,
-    @Autowired
-    val userRepository: UserRepository,
     @Autowired
     val formRepository: FormRepository
 ) {

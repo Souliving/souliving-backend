@@ -21,18 +21,6 @@ import java.time.LocalDateTime
 class FormService(
     private val formRepository: FormRepository,
     @Autowired
-    private val homeTypeService: HomeTypeService,
-    @Autowired
-    private val cityService: CityService,
-    @Autowired
-    private val propertiesService: PropertiesService,
-    @Autowired
-    private val metroService: MetroService,
-    @Autowired
-    private val districtService: DistrictService,
-    @Autowired
-    private val userService: UserService,
-    @Autowired
     private val databaseClient: DatabaseClient,
 ) {
 
