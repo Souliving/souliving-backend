@@ -123,13 +123,17 @@ class FormService(
         return sql
     }
 
-    private fun List<Long>.buildSqlParameter(): String {
+    private fun List<Number>.buildSqlParameter(): String {
         if (this.isEmpty()) {
             return "null"
         }
         var result = "array["
         this.forEach {
-            result += "$it::bigint,"
+            result += when(it) {
+                is Int -> "$it::int,"
+                is Long -> "$it::bigint,"
+                else -> "$it::int,"
+            }
         }
         result = result.substring(0, result.length - 1)
         result = result.plus("]")
