@@ -43,7 +43,17 @@ class FormController(private var formService: FormService) {
             logResponse("Get all short forms by properties : $properties")
             it
         }
-    
+
+    @PostMapping("/createFormForUserById/{userId}")
+    suspend fun createFormForUserById(
+        @PathVariable userId: Long,
+        @RequestBody form: CreateFormDto
+    ): ShortFormDto = formService.createFormForUserById(userId, form).let {
+        logResponse("Create form for user $userId")
+        it
+    }
+
+
     @PostMapping("/getShortFormsWithFilter")
     suspend fun getShortFormsWithFilter(@RequestBody filter: FilterDto): List<ShortFormDto> =
         formService.getShortFormsWithFilter(
@@ -52,7 +62,6 @@ class FormController(private var formService: FormService) {
             logResponse("Get all short forms by filter : $filter")
             it
         }
-
 
     @PutMapping("/updateMetroInForm")
     suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {

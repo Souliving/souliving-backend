@@ -10,6 +10,7 @@ import org.springframework.r2dbc.core.flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import souliving.backend.dto.*
+import souliving.backend.mapper.toForm
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toShortForm
 import souliving.backend.model.Properties
@@ -85,6 +86,13 @@ class FormService(
 
     }
 
+    @Transactional
+    suspend fun createFormForUserById(userId: Long, createForm: CreateFormDto): ShortFormDto {
+        val newForm = formRepository.save(createForm.toForm())
+        updateMetrosInForm(MetroFormDto(newForm.id, createForm.metroIds))
+        return formRepository.getShortFormsByFormId(newForm.id!!).toShortForm()
+    }
+
     suspend fun Map<String, Any>.parseToShortDto(): PlainShortFormDto {
         return PlainShortFormDto(
             id = this["id"] as Long,
@@ -92,9 +100,6 @@ class FormService(
             age = (this["age"] as Long).toInt(),
             cityid = this["cityid"] as Long,
             cityname = this["cityname"] as String,
-            districtid = this["districtid"] as Long,
-            districtname = this["districtname"] as String,
-            districtcityid = this["districtcityid"] as Long,
             metro = this["metro"] as String,
             budget = this["budget"] as Long,
             description = this["description"] as String,
@@ -129,7 +134,7 @@ class FormService(
         }
         var result = "array["
         this.forEach {
-            result += when(it) {
+            result += when (it) {
                 is Int -> "$it::int,"
                 is Long -> "$it::bigint,"
                 else -> "$it::int,"

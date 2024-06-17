@@ -24,6 +24,9 @@ interface FormRepository : CoroutineCrudRepository<Form, Long> {
     )
     fun getShortForms(): Flow<PlainShortFormDto>
 
+    @Query("select * from get_short_forms_by_form_id(:formId)")
+    suspend fun getShortFormsByFormId(formId: Long): PlainShortFormDto
+
     @Query("select * from get_forms()")
     fun getForms(): Flow<PlainFormDto>
 }

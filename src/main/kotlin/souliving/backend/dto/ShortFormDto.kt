@@ -11,7 +11,6 @@ data class ShortFormDto(
     var name: String,
     val age: Int,
     var city: City? = null,
-    var district: District? = null,
     var metro: List<Metro>,
     var budget: Long,
     var description: String,
