@@ -44,6 +44,13 @@ class FormController(private var formService: FormService) {
             it
         }
 
+    @GetMapping("/getFormById/{formId}")
+    suspend fun getFormById(@PathVariable formId: Long): FormDto =
+        formService.getFormByFormId(formId)?.let {
+            logResponse("Get form by user id : $formId")
+            it
+        } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by form id: $formId")
+
     @PostMapping("/createFormForUserById/{userId}")
     suspend fun createFormForUserById(
         @PathVariable userId: Long,
@@ -70,10 +77,10 @@ class FormController(private var formService: FormService) {
         }
     }
 
-    @GetMapping("/getFavoriteFormsByFormId/{formId}")
-    suspend fun getFavoriteFormsByFormId(@PathVariable formId: Long): List<ShortFormDto> =
-        formService.getAllFavoriteFormByFormId(formId).let {
-            logResponse("Get favorite form by formId : $formId")
+    @GetMapping("/getFavoriteFormsByUserId/{userId}")
+    suspend fun getFavoriteFormsByUserId(@PathVariable userId: Long): List<ShortFormDto> =
+        formService.getAllFavoriteFormByUserId(userId).let {
+            logResponse("Get favorite form by userId : $userId")
             it
         }
 

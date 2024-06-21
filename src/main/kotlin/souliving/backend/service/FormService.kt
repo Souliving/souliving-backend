@@ -30,6 +30,9 @@ class FormService(
     suspend fun getFormByUserId(id: Long): FormDto? =
         formRepository.findPlainDtoByUserId(id)?.toFormDto()
 
+    suspend fun getFormByFormId(id: Long): FormDto? =
+        formRepository.findPlainDtoByFormId(id)?.toFormDto()
+
     suspend fun getShortForms(): Flow<ShortFormDto> =
         formRepository.getShortForms().map { it.toShortForm() }
 
@@ -62,22 +65,22 @@ class FormService(
     }
 
     @Transactional
-    suspend fun addFavoriteForm(mainFormId: Long, favFormId: Long): Long {
-        databaseClient.sql("INSERT INTO favorite_forms(main_form_id, fav_form_id) VALUES (:mainFormId, :favFormId)")
-            .bind("mainFormId", mainFormId).bind("favFormId", favFormId)
+    suspend fun addFavoriteForm(userId: Long, favFormId: Long): Long {
+        databaseClient.sql("INSERT INTO favorite_forms(user_id, fav_form_id) VALUES (:user_id, :favFormId)")
+            .bind("user_id", userId).bind("favFormId", favFormId)
             .fetch().awaitRowsUpdated()
-        return mainFormId
+        return userId
     }
 
     @Transactional
-    suspend fun deleteFavoriteForm(mainFormId: Long, favFormId: Long): Boolean {
-        return databaseClient.sql("DELETE FROM favorite_forms WHERE main_form_id = :mainFormId and fav_form_id = :favFormId")
-            .bind("mainFormId", mainFormId).bind("favFormId", favFormId).fetch().awaitRowsUpdated() != 0L
+    suspend fun deleteFavoriteForm(userId: Long, favFormId: Long): Boolean {
+        return databaseClient.sql("DELETE FROM favorite_forms WHERE user_id = :user_id and fav_form_id = :favFormId")
+            .bind("user_id", userId).bind("favFormId", favFormId).fetch().awaitRowsUpdated() != 0L
     }
 
-    suspend fun getAllFavoriteFormByFormId(formId: Long): List<ShortFormDto> {
+    suspend fun getAllFavoriteFormByUserId(userId: Long): List<ShortFormDto> {
         val result =
-            databaseClient.sql("select * from get_fav_forms_by_form_id(:formId)").bind("formId", formId).fetch().flow()
+            databaseClient.sql("select * from get_fav_forms_by_user_id(:userId)").bind("userId", userId).fetch().flow()
                 .toList()
         val favForms = result.map {
             it.parseToShortDto()
