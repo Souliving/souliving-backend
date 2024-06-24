@@ -125,7 +125,9 @@ class FormService(
     private fun buildFilterRequest(filter: FilterDto): DatabaseClient.GenericExecuteSpec {
         val sqlString = "select * from" +
             " get_short_forms_with_filter" +
-            "(${filter.cityId.buildSqlParameter()}, ${filter.metroIds.buildSqlParameter()}," +
+            "(${filter.price.startPrice?.buildSqlParameter()},${filter.price.endPrice?.buildSqlParameter()}," +
+            "${filter.age.startAge?.buildSqlParameter()}, ${filter.age.endAge?.buildSqlParameter()}," +
+            "${filter.cityId.buildSqlParameter()}, ${filter.metroIds.buildSqlParameter()}," +
             " ${filter.smoking.buildSqlParameter()}, ${filter.alcohol.buildSqlParameter()}," +
             " ${filter.petFriendly.buildSqlParameter()}, ${filter.isClean.buildSqlParameter()})"
 
@@ -133,6 +135,17 @@ class FormService(
             sqlString
         )
         return sql
+    }
+
+    private fun Number.buildSqlParameter(): String {
+        if(this == null) {
+            return "null"
+        }
+        return when(this) {
+            is Long -> "$this::bigint"
+            is Int -> "$this::int"
+            else -> "$this::int"
+        }
     }
 
     private fun List<Number>.buildSqlParameter(): String {

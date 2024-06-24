@@ -4,6 +4,8 @@ import souliving.backend.model.NoArg
 
 @NoArg
 data class FilterDto(
+    val price: PriceFilterDto,
+    val age: AgeFilterDto,
     val cityId: List<Long>,
     val metroIds: List<Long>,
     val smoking: Boolean?,
@@ -13,11 +15,11 @@ data class FilterDto(
 )
 
 data class AgeFilterDto(
-    val startAge: Long,
-    val endAge: Long,
+    val startAge: Int? = null,
+    val endAge: Int? = null,
 )
 
 data class PriceFilterDto(
-    val startPrice: Long,
-    val endPrice: Long,
+    val startPrice: Long? = null,
+    val endPrice: Long? = null
 )
