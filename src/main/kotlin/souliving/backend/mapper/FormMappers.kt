@@ -28,6 +28,26 @@ fun PlainShortFormDto.toShortForm(): ShortFormDto = ShortFormDto(
     onlineDateTime = this.onlinedatetime
 )
 
+fun PlainFullFormDto.toFullForm(): FullFormDto = FullFormDto(
+    id = this.id,
+    userId = this.userid,
+    name = this.name,
+    age = this.age,
+    city = City(this.cityid, this.cityname!!),
+    metro = parseMetro(this.metro),
+    budget = this.budget,
+    description = this.description,
+    dateMove = this.datemove,
+    properties = Properties(
+        this.propertiesid, this.smoking, this.alcohol, this.petfriendly!!, this.isclean!!, this.homeownerid
+    ),
+    photoId = this.photoid,
+    onlineDateTime = this.onlinedatetime,
+    homeType = HomeType(this.hometypeid!!, this.hometypename!!),
+    rating = this.rating,
+    reviews = listOf(this.reviews)
+)
+
 fun parseMetro(metroJson: String): List<Metro> {
     val model: List<Map<String, String>> = mapper.readValue(metroJson)
     val metroList = mutableListOf<Metro>()
@@ -40,8 +60,6 @@ fun parseMetro(metroJson: String): List<Metro> {
 fun PlainFormDto.toFormDto(): FormDto {
     return FormDto(
         id = this.id,
-        userId = this.userid,
-        description = this.description!!,
         homeType = HomeType(this.hometypeid!!, this.hometypename!!),
         rating = this.rating!!,
         reviews = listOf(this.reviews!!)

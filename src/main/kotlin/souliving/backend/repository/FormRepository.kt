@@ -5,6 +5,7 @@ import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 import souliving.backend.dto.PlainFormDto
+import souliving.backend.dto.PlainFullFormDto
 import souliving.backend.dto.PlainShortFormDto
 import souliving.backend.model.Form
 
@@ -32,4 +33,7 @@ interface FormRepository : CoroutineCrudRepository<Form, Long> {
 
     @Query("select * from get_forms()")
     fun getForms(): Flow<PlainFormDto>
+
+    @Query("select * from get_full_forms_by_form_id(:id)")
+    suspend fun findPlainFullDtoById(id: Long): PlainFullFormDto?
 }

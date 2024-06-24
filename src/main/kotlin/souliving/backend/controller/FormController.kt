@@ -70,6 +70,14 @@ class FormController(private var formService: FormService) {
             it
         }
 
+    @GetMapping("/getFullFormById/{id}")
+    suspend fun getFullFormById(@PathVariable id: Long): FullFormDto =
+        formService.getFullFormById(id)?.let {
+            logResponse("Get form by id : $id")
+            it
+        } ?: throw ResponseStatusException(
+            HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by id: $id"
+        )
     @PutMapping("/updateMetroInForm")
     suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {
         formService.updateMetrosInForm(newMetros).let {
@@ -87,19 +95,19 @@ class FormController(private var formService: FormService) {
 
     @DeleteMapping("/deleteFavoriteForm")
     suspend fun deleteFavoriteForm(@RequestBody fvDto: FavFormDto) {
-        val mainFormId = fvDto.mainFormId
+        val userId = fvDto.userId
         val favFormId = fvDto.favFormId
-        formService.deleteFavoriteForm(mainFormId, favFormId).let {
-            logResponse("Delete favorite form by formId : $mainFormId")
+        formService.deleteFavoriteForm(userId, favFormId).let {
+            logResponse("Delete favorite form by userId : $userId")
         }
     }
 
     @PutMapping("/addFavoriteForm")
     suspend fun addFavoriteForm(@RequestBody fvDto: FavFormDto) {
-        val mainFormId = fvDto.mainFormId
+        val userId = fvDto.userId
         val favFormId = fvDto.favFormId
-        formService.addFavoriteForm(mainFormId, favFormId).let {
-            logResponse("Add favorite form by formId : $mainFormId")
+        formService.addFavoriteForm(userId, favFormId).let {
+            logResponse("Add favorite form by userId : $userId")
         }
     }
 }

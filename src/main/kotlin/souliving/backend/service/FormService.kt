@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 import souliving.backend.dto.*
 import souliving.backend.mapper.toForm
 import souliving.backend.mapper.toFormDto
+import souliving.backend.mapper.toFullForm
 import souliving.backend.mapper.toShortForm
 import souliving.backend.model.Properties
 import souliving.backend.repository.FormRepository
@@ -52,6 +53,9 @@ class FormService(
         }
         return filteredForms.map { it.toShortForm() }
     }
+
+    suspend fun getFullFormById(id: Long): FullFormDto? =
+        formRepository.findPlainFullDtoById(id)?.toFullForm()
 
     @Transactional
     suspend fun updateMetrosInForm(mfDto: MetroFormDto): Boolean {

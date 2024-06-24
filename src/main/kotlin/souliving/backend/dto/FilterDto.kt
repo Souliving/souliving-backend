@@ -11,3 +11,13 @@ data class FilterDto(
     val petFriendly: Boolean?,
     val isClean: Boolean?
 )
+
+data class AgeFilterDto(
+    val startAge: Long,
+    val endAge: Long,
+)
+
+data class PriceFilterDto(
+    val startPrice: Long,
+    val endPrice: Long,
+)
