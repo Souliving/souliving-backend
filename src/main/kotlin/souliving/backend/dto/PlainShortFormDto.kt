@@ -17,7 +17,7 @@ data class PlainShortFormDto(
     var alcohol: Boolean,
     var petfriendly: Boolean?,
     var isclean: Boolean?,
-    var homeownerid: Int? = null,
+    var homeownerid: Long? = null,
     var photoid: Long? = null,
     var onlinedatetime: LocalDateTime?,
 )

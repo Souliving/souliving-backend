@@ -19,7 +19,6 @@ data class Form(
     var id: Long? = null,
     var userId: Long? = null,
     var description: String,
-    var homeTypeId: Long? = null,
     var rating: Double,
     var reviews: List<String>,
     var photoId: Long? = null,

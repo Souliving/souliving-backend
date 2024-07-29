@@ -2,6 +2,8 @@ package souliving.backend.service
 
 import kotlinx.coroutines.flow.flowOf
 import org.springframework.stereotype.Service
+import souliving.backend.dto.CreatePropertiesDto
+import souliving.backend.mapper.toProperties
 import souliving.backend.model.Properties
 import souliving.backend.repository.PropertiesRepository
 
@@ -10,29 +12,10 @@ class PropertiesService(
     private val propertiesRepository: PropertiesRepository
 ) {
 
-    private var properties = flowOf(
-        Properties(
-            0,
-            smoking = false,
-            alcohol = false,
-            petFriendly = true,
-            isClean = true,
-            homeOwnerId = 0
-        ),
-        Properties(
-            1,
-            smoking = true,
-            alcohol = true,
-            petFriendly = false,
-            isClean = false,
-            homeOwnerId = 1
-        )
-    )
-
     suspend fun getPropertiesById(id: Long): Properties? =
         propertiesRepository.findById(id)
 
-    suspend fun createProperties(prop: Properties): Properties? {
-        return propertiesRepository.save(prop)
+    suspend fun createProperties(propDto: CreatePropertiesDto): Long? {
+        return propertiesRepository.save(propDto.toProperties()).id
     }
 }

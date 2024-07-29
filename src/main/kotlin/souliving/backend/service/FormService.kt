@@ -10,10 +10,10 @@ import org.springframework.r2dbc.core.flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import souliving.backend.dto.*
-import souliving.backend.mapper.toForm
 import souliving.backend.mapper.toFormDto
 import souliving.backend.mapper.toFullForm
 import souliving.backend.mapper.toShortForm
+import souliving.backend.model.Form
 import souliving.backend.model.Properties
 import souliving.backend.repository.FormRepository
 import java.time.LocalDateTime
@@ -24,6 +24,8 @@ class FormService(
     private val formRepository: FormRepository,
     @Autowired
     private val databaseClient: DatabaseClient,
+    @Autowired
+    private val propertiesService: PropertiesService
 ) {
 
     fun getAllForms(): Flow<FormDto> = formRepository.getForms().map { it.toFormDto() }
@@ -69,6 +71,14 @@ class FormService(
     }
 
     @Transactional
+    suspend fun updateHomeTypesInForm(homeTypes: HomeTypeFormDto) {
+        homeTypes.homeTypeIds.forEach { homeTypeId ->
+            databaseClient.sql("INSERT INTO home_type_form(form_id, home_type_id) VALUES (:formId, :homeTypeId)")
+                .bind("formId", homeTypes.formId).bind("homeTypeId", homeTypeId).fetch().awaitRowsUpdated()
+        }
+    }
+
+    @Transactional
     suspend fun addFavoriteForm(userId: Long, favFormId: Long): Long {
         databaseClient.sql("INSERT INTO favorite_forms(user_id, fav_form_id) VALUES (:user_id, :favFormId)")
             .bind("user_id", userId).bind("favFormId", favFormId)
@@ -94,9 +104,12 @@ class FormService(
     }
 
     @Transactional
-    suspend fun createFormForUserById(userId: Long, createForm: CreateFormDto): ShortFormDto {
+    suspend fun createFormForUserById(createForm: CreateFormDto): ShortFormDto {
         val newForm = formRepository.save(createForm.toForm())
+
         updateMetrosInForm(MetroFormDto(newForm.id, createForm.metroIds))
+        updateHomeTypesInForm(HomeTypeFormDto(newForm.id!!, createForm.homeTypesIds!!))
+
         return formRepository.getShortFormsByFormId(newForm.id!!).toShortForm()
     }
 
@@ -116,9 +129,25 @@ class FormService(
             alcohol = this["alcohol"] as Boolean,
             petfriendly = this["petfriendly"] as Boolean,
             isclean = this["isclean"] as Boolean,
-            homeownerid = (this["homeownerid"] as Long).toInt(),
+            homeownerid = (this["homeownerid"] as Long),
             photoid = this["photoid"] as Long,
             onlinedatetime = this["onlinedatetime"] as LocalDateTime
+        )
+    }
+
+
+    private suspend fun CreateFormDto.toForm(): Form {
+        return Form(
+            userId = this.userId,
+            description = this.description,
+            rating = this.rating,
+            reviews = this.reviews,
+            photoId = this.photoId,
+            propertiesId = propertiesService.createProperties(this.properties!!),
+            cityId = this.cityId,
+            budget = this.budget,
+            dateMove = this.dateMove,
+            onlineDateTime = this.onlineDateTime
         )
     }
 

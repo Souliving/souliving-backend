@@ -43,7 +43,7 @@ fun PlainFullFormDto.toFullForm(): FullFormDto = FullFormDto(
     ),
     photoId = this.photoid,
     onlineDateTime = this.onlinedatetime,
-    homeType = HomeType(this.hometypeid!!, this.hometypename!!),
+    homeType = parseHomeTypes(this.hometype!!),
     rating = this.rating,
     reviews = listOf(this.reviews)
 )
@@ -60,24 +60,17 @@ fun parseMetro(metroJson: String): List<Metro> {
 fun PlainFormDto.toFormDto(): FormDto {
     return FormDto(
         id = this.id,
-        homeType = HomeType(this.hometypeid!!, this.hometypename!!),
+        homeType = parseHomeTypes(this.hometype!!),
         rating = this.rating!!,
         reviews = listOf(this.reviews!!)
     )
 }
 
-fun CreateFormDto.toForm(): Form {
-    return Form(
-        userId = this.userId,
-        description = this.description,
-        homeTypeId = this.homeTypeId,
-        rating = this.rating,
-        reviews = this.reviews,
-        photoId = this.photoId,
-        propertiesId = this.propertiesId,
-        cityId = this.cityId,
-        budget = this.budget,
-        dateMove = this.dateMove,
-        onlineDateTime = this.onlineDateTime
-    )
+fun parseHomeTypes(homeTypesJson: String): List<HomeType> {
+    val model: List<Map<String, String>> = mapper.readValue(homeTypesJson)
+    val homeTypes = mutableListOf<HomeType>()
+    model.forEach { homeType ->
+        homeTypes.add(HomeType(homeType["id"]?.toLong(), homeType["name"]!!))
+    }
+    return homeTypes
 }

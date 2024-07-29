@@ -18,11 +18,10 @@ data class PlainFullFormDto(
     var alcohol: Boolean,
     var petfriendly: Boolean?,
     var isclean: Boolean?,
-    var homeownerid: Int? = null,
+    var homeownerid: Long? = null,
     var photoid: Long? = null,
     var onlinedatetime: LocalDateTime?,
-    var hometypeid: Long? = null,
-    var hometypename: String? = null,
+    var hometype: String? = null,
     var socialMedia: Long? = null,
     var rating: Double,
     var reviews: String

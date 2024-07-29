@@ -19,7 +19,7 @@ data class FullFormDto(
     var properties: Properties? = null,
     var photoId: Long? = null,
     var onlineDateTime: LocalDateTime?,
-    var homeType: HomeType? = null,
+    var homeType: List<HomeType>? = null,
     var socialMediaIds: List<Long>? = null,
     var rating: Double,
     var reviews: List<String>

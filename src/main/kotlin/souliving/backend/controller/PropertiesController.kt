@@ -3,6 +3,7 @@ package souliving.backend.controller
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.CreatePropertiesDto
 import souliving.backend.logger.logResponse
 import souliving.backend.model.Properties
 import souliving.backend.service.PropertiesService
@@ -20,14 +21,4 @@ class PropertiesController(private var propertiesService: PropertiesService) {
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find properties by id: $id"
         )
-
-    @PostMapping("/createProperties")
-    suspend fun createProperties(@RequestBody properties: Properties) {
-        propertiesService.createProperties(properties)?.let {
-            logResponse("Create properties")
-        } ?: throw ResponseStatusException(
-            HttpStatus.INTERNAL_SERVER_ERROR, "Cannot create properties"
-        )
-
-    }
 }

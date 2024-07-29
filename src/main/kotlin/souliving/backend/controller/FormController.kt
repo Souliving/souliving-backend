@@ -21,7 +21,7 @@ class FormController(private var formService: FormService) {
             it
         }
 
-    
+
     @GetMapping("/getFormByUserId/{userId}")
     suspend fun getFormByUserId(@PathVariable userId: Long): FormDto =
         formService.getFormByUserId(userId)?.let {
@@ -52,12 +52,11 @@ class FormController(private var formService: FormService) {
             it
         } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by form id: $formId")
 
-    @PostMapping("/createFormForUserById/{userId}")
+    @PostMapping("/createFormForUserById")
     suspend fun createFormForUserById(
-        @PathVariable userId: Long,
         @RequestBody form: CreateFormDto
-    ): ShortFormDto = formService.createFormForUserById(userId, form).let {
-        logResponse("Create form for user $userId")
+    ): ShortFormDto = formService.createFormForUserById(form).let {
+        logResponse("Create form for user ${form.userId}")
         it
     }
 
