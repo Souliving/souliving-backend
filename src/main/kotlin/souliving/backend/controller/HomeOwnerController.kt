@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.CreateHomeOwnerDto
 import souliving.backend.logger.logResponse
 import souliving.backend.model.home.HomeOwner
 import souliving.backend.service.HomeOwnerService
@@ -40,4 +41,11 @@ class HomeOwnerController(private var homeOwnerService: HomeOwnerService) {
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find home owner by home type  id: $id"
         )
+
+    @PostMapping("/createHomeOwner")
+    suspend fun createHomeOwner(@RequestBody homeOwner: CreateHomeOwnerDto) : Long =
+        homeOwnerService.createHomeOwner(homeOwner).let {
+            logResponse("Create home owner by id: $it")
+            it
+        } ?: throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Didn't create homeOwner")
 }
