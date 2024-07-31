@@ -59,9 +59,9 @@ class ImageService(
         return decompressImage(dbImage)
     }
 
-    suspend fun downloadImageByUserId(userId: Long): ByteArray? {
-        val form = formRepository.findFormByUserId(userId).first()
-        val dbImage: Image = imageRepository.findById(form.photoId!!)
+    suspend fun downloadImageByFormId(formId: Long): ByteArray? {
+        val form = formRepository.findById(formId)
+        val dbImage: Image = imageRepository.findById(form?.photoId!!)
         return decompressImage(dbImage)
     }
 
