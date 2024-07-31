@@ -47,4 +47,26 @@ class MetroServiceTest(
 
         result shouldBe expectedMetros
     }
+
+    should("Get metros by name should return valid metro") {
+        val name = "Чкаловская"
+        val expectedMetro = Metro(1L, "Чкаловская", 2L)
+
+        given(metroRepository.findMetroByName(name)).willReturn(expectedMetro)
+
+        val result = metroService.getMetroByName(name)
+
+        result shouldBe expectedMetro
+    }
+
+    should("Get metro by id should return valid metro") {
+        val id = 2L
+        val expectedMetro = Metro(id, "Чкаловская", 2L)
+
+        given(metroRepository.findById(id)).willReturn(expectedMetro)
+
+        val result = metroService.getMetroById(id)
+
+        result shouldBe expectedMetro
+    }
 })
