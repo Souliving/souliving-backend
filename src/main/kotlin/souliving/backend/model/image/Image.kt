@@ -1,11 +1,13 @@
 package souliving.backend.model.image
 
-import jakarta.persistence.*
-import org.springframework.data.relational.core.mapping.Table
-import souliving.backend.model.NoArg
 
-@Entity
-@NoArg
+import jakarta.persistence.Column
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Lob
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
+
 @Table("photos")
 data class Image(
     @Id
