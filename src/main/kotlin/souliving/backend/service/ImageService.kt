@@ -1,12 +1,12 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.apache.commons.lang3.exception.ContextedRuntimeException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.r2dbc.core.*
 import org.springframework.stereotype.Service
 import souliving.backend.model.image.Image
 import souliving.backend.repository.FormRepository
@@ -22,7 +22,9 @@ class ImageService(
     @Autowired
     val imageRepository: ImageRepository,
     @Autowired
-    val formRepository: FormRepository
+    val formRepository: FormRepository,
+    @Autowired
+    private val databaseClient: DatabaseClient,
 ) {
     @Throws(IOException::class)
     suspend fun uploadImage(imageFile: FilePart): Long? {
@@ -54,6 +56,7 @@ class ImageService(
                 .addContextValue("Image name", imageName)
         }
     }
+
     suspend fun downloadImageById(id: Long): ByteArray? {
         val dbImage: Image = imageRepository.findById(id)
         return decompressImage(dbImage)
@@ -64,6 +67,24 @@ class ImageService(
         val dbImage: Image = imageRepository.findById(form?.photoId!!)
         return decompressImage(dbImage)
     }
+
+    suspend fun downloadImageByUserId(userId: Long): ByteArray? {
+        val result = databaseClient.sql("select up.photo_id from user_photos_ids up where up.user_id = $userId").fetch()
+            .awaitOne()
+        var photoId: Long = 0
+        result.forEach { (t, u) ->
+            if (t == "photo_id")
+                photoId = u as Long
+        }
+        return downloadImageById(photoId)
+    }
+
+    suspend fun uploadImageByUserId(imageId: Long, userId: Long): Boolean {
+        val result = databaseClient.sql("INSERT INTO user_photos_ids(user_id, photo_id) VALUES (:user_id, :photo_id)")
+            .bind("user_id", userId).bind("photo_id", imageId).fetch().awaitRowsUpdated()
+        return result != 0L
+    }
+
 
     fun decompressImage(dbImage: Image): ByteArray? {
         try {

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import souliving.backend.dto.ImageUserDto
 import souliving.backend.logger.logResponse
 import souliving.backend.service.ImageService
 
@@ -53,5 +54,25 @@ class ImageController(
         return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
             .body<ByteArray>(imageData)
+    }
+
+    @GetMapping("getImageByUserId/{userId}")
+    suspend fun getImageByUserId(@PathVariable userId: Long): ResponseEntity<*> {
+        val imageData: ByteArray? = imageService.downloadImageByUserId(userId)
+        logResponse("Download image by user id: $userId")
+        return ResponseEntity.status(HttpStatus.OK)
+            .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
+            .body<ByteArray>(imageData)
+    }
+
+    @PostMapping("uploadImageByUserId")
+    suspend fun uploadImageByUserId(@RequestBody dto: ImageUserDto): ResponseEntity<*> {
+        val result = imageService.uploadImageByUserId(dto.imageId, dto.userId)
+        return if (result) {
+            logResponse("Upload image by user id: $result")
+            ResponseEntity.ok("Success upload image")
+        } else {
+            ResponseEntity.internalServerError().body("Problem with uploading")
+        }
     }
 }
