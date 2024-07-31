@@ -25,7 +25,7 @@ class ImageService(
     val formRepository: FormRepository
 ) {
     @Throws(IOException::class)
-    suspend fun uploadImage(imageFile: FilePart): String {
+    suspend fun uploadImage(imageFile: FilePart): Long? {
         val imageToSave = Image(
             name = imageFile.filename(), type = imageFile.headers().contentType!!.type,
             container = ImageUtils.compressImage(
@@ -36,8 +36,8 @@ class ImageService(
             )
         )
 
-        imageRepository.save(imageToSave)
-        return "file uploaded successfully : " + imageFile.filename()
+        val image = imageRepository.save(imageToSave)
+        return image.id
     }
 
     suspend fun downloadImage(imageName: String?): ByteArray? {

@@ -7,6 +7,7 @@ import org.springframework.http.MediaType.IMAGE_PNG_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import souliving.backend.logger.logResponse
 import souliving.backend.service.ImageService
 
@@ -20,11 +21,11 @@ class ImageController(
 ) {
 
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    suspend fun uploadImage(@RequestPart("image") image: FilePart?): ResponseEntity<*> {
-        val uploadImage: String = image?.let { imageService.uploadImage(image) }
-            ?: return ResponseEntity.status(HttpStatus.CONFLICT).body("You should provide a valid file")
-        logResponse("Upload image with name: $uploadImage")
-        return ResponseEntity.status(HttpStatus.OK).body(uploadImage)
+    suspend fun uploadImage(@RequestPart("image") image: FilePart?): Long {
+        val uploadImageId: Long = imageService.uploadImage(image!!)
+            ?: throw ResponseStatusException(HttpStatus.CONFLICT, "You should provide a valid file")
+        logResponse("Upload image with name: $uploadImageId")
+        return uploadImageId
     }
 
     @GetMapping("/{fileName}")
