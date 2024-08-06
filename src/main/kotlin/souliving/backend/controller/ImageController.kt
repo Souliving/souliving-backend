@@ -73,7 +73,7 @@ class ImageController(
         val result = imageService.uploadImageByUserId(uploadImageId, userId)
         return if (result) {
             logResponse("Upload image by user id: $userId")
-            ResponseEntity.ok("Success upload image")
+            ResponseEntity.ok(uploadImageId)
         } else {
             ResponseEntity.internalServerError().body("Problem with uploading")
         }
