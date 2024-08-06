@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import souliving.backend.dto.ImageUserDto
 import souliving.backend.logger.logResponse
 import souliving.backend.service.ImageService
 
@@ -65,11 +64,15 @@ class ImageController(
             .body<ByteArray>(imageData)
     }
 
-    @PostMapping("uploadImageByUserId")
-    suspend fun uploadImageByUserId(@RequestBody dto: ImageUserDto): ResponseEntity<*> {
-        val result = imageService.uploadImageByUserId(dto.imageId, dto.userId)
+
+    @PostMapping("uploadImageByUserId/{userId}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    suspend fun uploadImageByUserId(@PathVariable userId: Long, @RequestPart("image") image: FilePart?): ResponseEntity<*> {
+        val uploadImageId: Long = imageService.uploadImage(image!!)
+            ?: throw ResponseStatusException(HttpStatus.CONFLICT, "You should provide a valid file")
+
+        val result = imageService.uploadImageByUserId(uploadImageId, userId)
         return if (result) {
-            logResponse("Upload image by user id: ${dto.userId}")
+            logResponse("Upload image by user id: $userId")
             ResponseEntity.ok("Success upload image")
         } else {
             ResponseEntity.internalServerError().body("Problem with uploading")
