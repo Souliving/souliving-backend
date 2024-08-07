@@ -4,9 +4,9 @@ spring:
       max-file-size: 5MB
       max-request-size: 6MB
   r2dbc:
-    url: r2dbc:postgresql://193.149.190.120:5432/souliving
+    url: r2dbc:postgresql://94.103.89.23:5432/coliver
     username: postgres
-    password: 402012Ehodas
+    password: 4fFzG5313GCQnLCr
   jpa:
     hibernate:
       ddl-auto: update
