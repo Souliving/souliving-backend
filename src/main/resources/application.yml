@@ -18,7 +18,8 @@ spring:
 jwt:
   secret: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW1vLXNlY3VyaXR5IiwiaWF0IjoxNzA1OTQxOTk0LCJleHAiOjE3MDU5NDM1OTR9.y4NXkiSAcSULeaZgRTdlHEY9qyfUWPasPbjtHW6YXnY
   issuer: demo-security
-  expirationTime: 30m
+  expirationTime: 10m
+  refreshExpirationTime: 30m
 
 server:
   port: 8080

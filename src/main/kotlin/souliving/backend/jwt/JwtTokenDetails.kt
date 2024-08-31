@@ -7,6 +7,7 @@ data class JwtTokenDetails(
     val email: String,
     val name: String,
     val token: String,
+    val refreshToken: String,
     val issueDate: Date,
     val expirationDate: Date,
 )

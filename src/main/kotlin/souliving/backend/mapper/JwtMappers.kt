@@ -9,6 +9,7 @@ fun JwtTokenDetails.toLoginAnswerDto(): LoginAnswerDto {
         JwtDTO(
             this.userId,
             this.token,
+            this.refreshToken,
             this.issueDate,
             this.expirationDate
         ),

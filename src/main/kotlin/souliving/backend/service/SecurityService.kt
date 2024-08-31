@@ -5,14 +5,17 @@ import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import souliving.backend.dto.SuccessRefreshDto
 import souliving.backend.jwt.JwtTokenDetails
 import souliving.backend.jwt.JwtTokenGenerator
+import souliving.backend.jwt.JwtTokenVerifier
 
 @Service
 class SecurityService(
     val userService: UserService,
     val passwordEncoder: PasswordEncoder,
-    val jwtTokenGenerator: JwtTokenGenerator
+    val jwtTokenGenerator: JwtTokenGenerator,
+    val jwtTokenVerifier: JwtTokenVerifier
 ) {
 
     suspend fun authenticate(email: String, password: String): JwtTokenDetails {
@@ -27,5 +30,10 @@ class SecurityService(
         }
 
         return jwtTokenGenerator.generateToken(user)
+    }
+
+    suspend fun refresh(refreshToken: String): SuccessRefreshDto {
+        val res = jwtTokenVerifier.verify(refreshToken)
+        return jwtTokenGenerator.generateTokenByClaims(res.claims)
     }
 }

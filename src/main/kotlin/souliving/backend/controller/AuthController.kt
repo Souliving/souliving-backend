@@ -45,6 +45,12 @@ class AuthController(val userService: UserService, val securityService: Security
         return loginUser(authUserDetails)
     }
 
+    @PostMapping("refresh")
+    suspend fun refresh(@RequestBody token: RefreshDto): SuccessRefreshDto {
+        logResponse("Refresh token: $token")
+        return refreshToken(token)
+    }
+
     private suspend fun loginUser(authUserDetails: AuthUserDetails): LoginAnswerDto {
         val jwt = withContext(Dispatchers.IO) {
             async {
@@ -57,5 +63,15 @@ class AuthController(val userService: UserService, val securityService: Security
         logResponse("Login with email: ${authUserDetails.email}")
 
         return jwtAnswer.toLoginAnswerDto()
+    }
+
+    private suspend fun refreshToken(token: RefreshDto): SuccessRefreshDto {
+        val jwt = withContext(Dispatchers.IO) {
+            async {
+                securityService.refresh(token.refreshToken)
+            }
+        }
+        val jwtAnswer = jwt.await()
+        return SuccessRefreshDto(jwtAnswer.token, jwtAnswer.refreshToken)
     }
 }

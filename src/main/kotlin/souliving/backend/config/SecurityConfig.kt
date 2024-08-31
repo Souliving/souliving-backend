@@ -23,6 +23,8 @@ import java.security.SecureRandom
 @Configuration
 class SecurityConfig : WebFluxConfigurer {
 
+    //    val whiteList =
+//        arrayOf("/webjars/**", "/swagger-ui/**",  "/swagger-resources/*", "/swagger-ui.html", "/api-docs/**", "api/v1/auth/**")
     val whiteList =
         arrayOf("/api/v1/**", "/**")
 
@@ -38,6 +40,7 @@ class SecurityConfig : WebFluxConfigurer {
             .csrf { it.disable() }
             .authorizeExchange {
                 it.pathMatchers(HttpMethod.GET, *whiteList).permitAll()
+                    //.pathMatchers(HttpMethod.GET, *arrayOf("/api/v1/**")).authenticated()
                     .pathMatchers(HttpMethod.POST, *whiteList).permitAll()
                     .pathMatchers(HttpMethod.DELETE, *whiteList).permitAll()
                     .pathMatchers(HttpMethod.PUT, *whiteList).permitAll()

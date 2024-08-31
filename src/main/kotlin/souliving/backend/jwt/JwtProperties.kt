@@ -9,5 +9,6 @@ import java.time.Duration
 data class JwtProperties(
     var secret: String = "",
     var issuer: String = "",
-    var expirationTime: Duration = Duration.ZERO
+    var expirationTime: Duration = Duration.ZERO,
+    var refreshExpirationTime: Duration = Duration.ZERO
 )
