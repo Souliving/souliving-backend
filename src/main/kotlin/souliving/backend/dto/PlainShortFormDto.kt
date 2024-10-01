@@ -20,4 +20,5 @@ data class PlainShortFormDto(
     var homeownerid: Long? = null,
     var photoid: Long? = null,
     var onlinedatetime: LocalDateTime?,
+    var isfavorite : Boolean?
 )

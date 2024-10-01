@@ -18,4 +18,5 @@ data class ShortFormDto(
     var properties: Properties? = null,
     var photoId: Long? = null,
     var onlineDateTime: LocalDateTime?,
+    var isFavorite: Boolean = false,
 )

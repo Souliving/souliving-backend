@@ -39,6 +39,13 @@ class FormService(
     suspend fun getShortForms(): Flow<ShortFormDto> =
         formRepository.getShortForms().map { it.toShortForm() }
 
+    suspend fun getShortFormsForUserId(userId: Long): List<ShortFormDto> {
+        val result =
+            databaseClient.sql("select * from get_short_forms_for_user_id(:userId)").bind("userId", userId).fetch()
+                .flow().toList()
+        val forms = result.map { it.parseToShortDto().toShortForm() }
+        return forms
+    }
 //    override suspend fun getFormByShortFormId(id: Long): FormDto? =
 //        formRepository.getFormByShortFormId(id)?.toDto()
 
@@ -46,8 +53,8 @@ class FormService(
         return formRepository.getShortForms().map { it.toShortForm() }
     }
 
-    suspend fun getShortFormsWithFilter(filter: FilterDto): List<ShortFormDto> {
-        val result = buildFilterRequest(filter)
+    suspend fun getShortFormsWithFilter(userId: Long, filter: FilterDto): List<ShortFormDto> {
+        val result = buildFilterRequest(userId, filter)
             .fetch().flow().toList()
 
         val filteredForms = result.map {
@@ -131,7 +138,8 @@ class FormService(
             isclean = this["isclean"] as Boolean,
             homeownerid = (this["homeownerid"] as Long),
             photoid = this["photoid"] as Long,
-            onlinedatetime = this["onlinedatetime"] as LocalDateTime
+            onlinedatetime = this["onlinedatetime"] as LocalDateTime,
+            isfavorite = this["isfavorite"] as Boolean,
         )
     }
 
@@ -151,10 +159,11 @@ class FormService(
         )
     }
 
-    private fun buildFilterRequest(filter: FilterDto): DatabaseClient.GenericExecuteSpec {
+    private fun buildFilterRequest(userId: Long, filter: FilterDto): DatabaseClient.GenericExecuteSpec {
         val sqlString = "select * from" +
             " get_short_forms_with_filter" +
-            "(${filter.price.startPrice?.buildSqlParameter()},${filter.price.endPrice?.buildSqlParameter()}," +
+            "(${userId.buildSqlParameter()}," +
+            "${filter.price.startPrice?.buildSqlParameter()},${filter.price.endPrice?.buildSqlParameter()}," +
             "${filter.age.startAge?.buildSqlParameter()}, ${filter.age.endAge?.buildSqlParameter()}," +
             "${filter.cityId.buildSqlParameter()}, ${filter.metroIds.buildSqlParameter()}," +
             " ${filter.smoking.buildSqlParameter()}, ${filter.alcohol.buildSqlParameter()}," +
@@ -167,10 +176,10 @@ class FormService(
     }
 
     private fun Number.buildSqlParameter(): String {
-        if(this == null) {
+        if (this == null) {
             return "null"
         }
-        return when(this) {
+        return when (this) {
             is Long -> "$this::bigint"
             is Int -> "$this::int"
             else -> "$this::int"

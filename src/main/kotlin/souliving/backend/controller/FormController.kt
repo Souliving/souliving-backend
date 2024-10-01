@@ -38,6 +38,13 @@ class FormController(private var formService: FormService) {
             it
         }
 
+    @GetMapping("getShortFormsForUserId/{userId}")
+    suspend fun getShortFormsForUserId(@PathVariable userId: Long): List<ShortFormDto> =
+        formService.getShortFormsForUserId(userId).let {
+            logResponse("Get all short forms")
+            it
+        }
+
     @GetMapping("/getShortFormsByProperties")
     suspend fun getShortFormsByProperties(@RequestBody properties: Properties): Flow<ShortFormDto> =
         formService.getShortFormsByProperties(properties).let {
@@ -61,9 +68,13 @@ class FormController(private var formService: FormService) {
     }
 
 
-    @PostMapping("/getShortFormsWithFilter")
-    suspend fun getShortFormsWithFilter(@RequestBody filter: FilterDto): List<ShortFormDto> =
+    @PostMapping("/getShortFormsWithFilter/{userId}")
+    suspend fun getShortFormsWithFilter(
+        @PathVariable userId: Long,
+        @RequestBody filter: FilterDto
+    ): List<ShortFormDto> =
         formService.getShortFormsWithFilter(
+            userId,
             filter
         ).let {
             logResponse("Get all short forms by filter : $filter")
@@ -78,6 +89,7 @@ class FormController(private var formService: FormService) {
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR, "Didn't find form by id: $id"
         )
+
     @PutMapping("/updateMetroInForm")
     suspend fun updateMetroInForm(@RequestBody newMetros: MetroFormDto) {
         formService.updateMetrosInForm(newMetros).let {

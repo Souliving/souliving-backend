@@ -25,7 +25,8 @@ fun PlainShortFormDto.toShortForm(): ShortFormDto = ShortFormDto(
         this.propertiesid, this.smoking, this.alcohol, this.petfriendly!!, this.isclean!!, this.homeownerid
     ),
     photoId = this.photoid,
-    onlineDateTime = this.onlinedatetime
+    onlineDateTime = this.onlinedatetime,
+    isFavorite = this.isfavorite ?: false,
 )
 
 fun PlainFullFormDto.toFullForm(): FullFormDto = FullFormDto(
