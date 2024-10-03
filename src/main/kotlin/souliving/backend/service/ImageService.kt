@@ -70,7 +70,7 @@ class ImageService(
 
     suspend fun downloadImageByUserId(userId: Long): ByteArray? {
         val result = databaseClient.sql("select up.photo_id from user_photos_ids up where up.user_id = $userId").fetch()
-            .awaitOne()
+            .awaitSingle()
         var photoId: Long = 0
         result.forEach { (t, u) ->
             if (t == "photo_id")
