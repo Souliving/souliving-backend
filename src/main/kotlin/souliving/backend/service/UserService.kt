@@ -1,12 +1,12 @@
 package souliving.backend.service
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
+import org.springframework.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.flow
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import souliving.backend.dto.CreateAdminDto
-import souliving.backend.dto.CreateUserDto
-import souliving.backend.dto.FillUserDto
-import souliving.backend.dto.UserDto
+import souliving.backend.dto.*
 import souliving.backend.exception.UserNotFoundException
 import souliving.backend.logger.log
 import souliving.backend.mapper.toDto
@@ -18,6 +18,7 @@ import souliving.backend.repository.UserRepository
 
 @Service
 class UserService(
+    private val databaseClient: DatabaseClient,
     private val userRepository: UserRepository,
     val passwordEncoder: PasswordEncoder
 ) {
@@ -53,5 +54,28 @@ class UserService(
 
         userRepository.save(fillingUser)
         return true
+    }
+
+    suspend fun getInfoForLKByUserId(userId: Long): List<LKInfo>? {
+        val result =
+            databaseClient.sql("select * from get_lk_info_for_user_id(:userId)").bind("userId", userId).fetch()
+                .flow().toList()
+        val info = result.map { it.parseToLKInfo() }
+        return info
+
+    }
+
+    suspend fun Map<String, Any>.parseToLKInfo(): LKInfo {
+        return LKInfo(
+            formId = this["formId"] as Long,
+            cityName = this["cityName"] as String,
+            metroNames = this["metroNames"].toString().parseMetroNames(),
+        )
+    }
+
+    private fun String.parseMetroNames(): List<String> {
+        var tmp = this.drop(2)
+        tmp = tmp.dropLast(2)
+        return tmp.filter { it != '"' }.split(",").map { it.trim() }
     }
 }

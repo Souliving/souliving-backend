@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import souliving.backend.dto.FillUserDto
+import souliving.backend.dto.LKInfo
 import souliving.backend.dto.UserDto
 import souliving.backend.logger.logResponse
 import souliving.backend.mapper.toDto
@@ -58,6 +59,19 @@ class UserController(private var userService: UserService) {
         }
         return ResponseEntity.status(HttpStatus.OK).body("Successful fill user with id: $id")
     }
+
+    @GetMapping("/lkByUserId/{id}")
+    suspend fun getInfoForLKByUserId(@PathVariable id: Long): ResponseEntity<*> {
+        val res: List<LKInfo>? = userService.getInfoForLKByUserId(id).let {
+            logResponse("Get info for lk by : $id")
+            it
+        }
+        if (res == null) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Problem with getting info lk by id: $id"
+            )
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(res)
+    }
 }
-
-
