@@ -7,6 +7,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.security.crypto.password.PasswordEncoder
 import souliving.backend.mapper.toDto
 import souliving.backend.model.Gender
@@ -22,6 +23,8 @@ class UserServiceTest(
     private var userRepository: UserRepository,
     @MockBean
     private var passwordEncoder: PasswordEncoder,
+    @MockBean
+    private var databaseClient: DatabaseClient,
     @Autowired
     private var userService: UserService
 ) : ShouldSpec({
