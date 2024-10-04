@@ -58,12 +58,12 @@ fun FillUserDto.toUser(user: User): User {
     val modifyDate = LocalDateTime.now()
     return User(
         id = user.id,
-        email = user.email,
+        email = this.email,
         password = user.password,
         role = user.role,
         name = this.name,
-        age = user.age,
-        gender = user.gender,
+        age = this.age,
+        gender = this.gender,
         enabled = user.enabled,
         createDate = user.createDate,
         modifyDate = modifyDate
